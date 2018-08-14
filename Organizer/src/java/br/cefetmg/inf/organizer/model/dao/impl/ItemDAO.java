@@ -273,6 +273,7 @@ public class ItemDAO implements IItemDAO {
                             itemList = new ArrayList<>();
                             do {
                                 Item item = new Item();
+                                item.setSeqItem(result.getLong("seq_item"));
                                 item.setNameItem(result.getString("nom_item"));
                                 item.setDescriptionItem(result.getString("des_item"));
                                 item.setIdentifierItem(result.getString("idt_item"));
@@ -330,6 +331,7 @@ public class ItemDAO implements IItemDAO {
                         itemList = new ArrayList<>();
                         do {
                             Item item = new Item();
+                            item.setSeqItem(result.getLong("seq_item"));
                             item.setNameItem(result.getString("nom_item"));
                             item.setDescriptionItem(result.getString("des_item"));
                             item.setIdentifierItem(result.getString("idt_item"));
@@ -405,6 +407,7 @@ public class ItemDAO implements IItemDAO {
                             itemList = new ArrayList<>();
                             do {
                                 Item item = new Item();
+                                item.setSeqItem(result.getLong("seq_item"));
                                 item.setNameItem(result.getString("nom_item"));
                                 item.setDescriptionItem(result.getString("des_item"));
                                 item.setIdentifierItem(result.getString("idt_item"));

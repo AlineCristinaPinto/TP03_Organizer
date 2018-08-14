@@ -27,4 +27,12 @@ $(function() {
       formRegister.submit();
   });
 
+  $(".checkTarC").click(function() {
+      let idItem = $(this).attr('id');
+      document.querySelector("#takeId").value=idItem;
+      let formRegister = document.querySelector("#deleteItem");
+      formRegister.action = "/organizer/servletcontroller?process=ChangeTarefaStatus";
+      formRegister.submit();
+  });
+
 })

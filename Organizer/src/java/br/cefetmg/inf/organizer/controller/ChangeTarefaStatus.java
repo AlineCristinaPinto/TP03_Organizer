@@ -6,7 +6,6 @@
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
-import br.cefetmg.inf.organizer.model.domain.ItemTag;
 import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
@@ -25,7 +24,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author aline
  */
-public class ConcludeTarefa implements GenericProcess {
+public class ChangeTarefaStatus implements GenericProcess {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -42,7 +41,7 @@ public class ConcludeTarefa implements GenericProcess {
         IKeepItem keepItem = new KeepItem();        
         Item item = keepItem.searchItemById(idItem);
         
-        item.setIdentifierStatus("C");
+        item.setIdentifierStatus("A");
         item.setUser(user);
         
         boolean result = keepItem.updateItem(item);
@@ -50,29 +49,26 @@ public class ConcludeTarefa implements GenericProcess {
         if(result == false){
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
-            error.setErrorDescription("Erro ao concluir tarefa");
-            error.setErrorSubtext("Não foi possível concluir a tarefa.");
+            error.setErrorDescription("Erro ao reativar tarefa");
+            error.setErrorSubtext("Não foi possível reativar a tarefa.");
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
             IKeepTag keepTag = new KeepTag();
-            Long idConclude = keepTag.searchTagByName("Concluidos", user);
+            Long idConclude = keepTag.searchTagByName("Concluidos", user);            
             Tag concludeTag = keepTag.searchTagById(idConclude);
+            
             ArrayList<Tag> tag = new ArrayList();
             tag.add(concludeTag);
            
             IKeepItemTag keepItemTag = new KeepItemTag();
-            ItemTag itemTag = new ItemTag(); 
-            itemTag.setItem(item);
-            itemTag.setListTags(tag);
-            
-            result = keepItemTag.createTagInItem(itemTag);
+            result = keepItemTag.deleteTagInItem(tag, idItem);
             
             if(result==false){
                 ErrorObject error = new ErrorObject();
                 error.setErrorName("Tente novamente");
-                error.setErrorDescription("Erro ao concluir tarefa");
-                error.setErrorSubtext("Não foi possível concluir a tarefa.");
+                error.setErrorDescription("Erro ao reativar tarefa");
+                error.setErrorSubtext("Não foi possível reativar a tarefa.");
                 req.getSession().setAttribute("error", error);
                 pageJSP = "/error.jsp";
             } else {

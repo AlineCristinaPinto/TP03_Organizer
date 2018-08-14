@@ -86,7 +86,7 @@ public class ItemFilter implements GenericProcess {
                     concluidoExists = true;
                     for(Item item : new ArrayList<>(itemList)){
                         if(item.getIdentifierItem().equals("TAR") && 
-                                item.getIdentifierStatus().equals("A")){
+                            item.getIdentifierStatus().equals("A")){
                             itemList.remove(item);
                         }
                     }
@@ -96,7 +96,7 @@ public class ItemFilter implements GenericProcess {
             if(!concluidoExists && (itemList != null)){
                 for(Item item : new ArrayList<>(itemList)){
                     if(item.getIdentifierItem().equals("TAR") && 
-                            item.getIdentifierStatus().equals("C")){
+                        item.getIdentifierStatus().equals("C")){
                         itemList.remove(item);
                     }
                 }

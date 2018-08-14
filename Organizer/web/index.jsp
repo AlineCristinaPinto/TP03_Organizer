@@ -76,7 +76,11 @@
                                                         </c:when>
                                                         <c:otherwise>
                                                             <li id="${list.identifierItem}" class="open">
-                                                                <button id="${list.seqItem}" value="${list.identifierItem}" class="opcoesItem btOption" data-toggle="modal" data-target="#btaoOpcaoModal"><i class="fa fa-ellipsis-v"></i></button>
+                                                                <label class="container" style="float:left">
+                                                                    <input id="${list.seqItem}" class="checkTarC" checked="true" type="checkbox" name="tarefa" value="${list.nameItem}">
+                                                                    <span class="checkmark"></span>
+                                                                </label>
+                                                                <button id="${list.seqItem}" class="opcoesItem btOption" value="${list.identifierItem}" data-toggle="modal" data-target="#btaoOpcaoModalTarefa"><i class="fa fa-ellipsis-v"></i></button>
                                                                 <div class="dropdownlink">${list.nameItem}</div>
                                                                 <ul class="submenuItems" style="display: none;">
                                                                     <c:if test = "${list.descriptionItem != ''}">
@@ -85,7 +89,7 @@
                                                                     <!-- tag <li class="liDescricao"></li>-->
                                                                     <c:if test = "${list.dateItem != null}">
                                                                         <li class="liDescricao" style="text-align: right">${list.dateItem}</li>
-                                                                        </c:if> 
+                                                                        </c:if>                                                                
                                                                 </ul>
                                                             </li>
                                                         </c:otherwise>
@@ -140,6 +144,26 @@
                             </a>
                         </form>
                         <hr>
+                        <form id="deleteItem" method="post">
+                            <input type="hidden" id="takeId" name="takeId">
+                            <a href="#" class="opItemModal delItem">                        
+                                <span class="fa fa-trash-o"></span> Excluir</span>
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal de botão de opção de tarefa -->
+        <div class="modal fade" id="btaoOpcaoModalTarefa" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Opções de Tarefa Concluída</h4>
+                    </div>
+                    <div class="modal-body">
                         <form id="deleteItem" method="post">
                             <input type="hidden" id="takeId" name="takeId">
                             <a href="#" class="opItemModal delItem">                        
