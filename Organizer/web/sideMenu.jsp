@@ -101,8 +101,7 @@
 
         <li class="xn-openable">
             <a href="#"><span class="fa fa-tag"></span> <span class="xn-text">Tags</span></a>
-            <%                
-                listTag = keepTag.listAlltag(userSessao);
+            <%                listTag = keepTag.listAlltag(userSessao);
 
                 String[] usedTags = request.getParameterValues("tag");
 
@@ -124,8 +123,10 @@
                                        </c:forEach>
                                        >
                                 <span class="checkmarkTarefa"></span>
-                                <button class="buttonStyle delete" id="${list.tagName}" name="deleteButton"><i class="glyphicon glyphicon-trash"></i></button>
-                                <button class="buttonStyle editer" id="${list.tagName}" name="editButton"><i class="glyphicon glyphicon-cog"></i></button>
+                                <c:if test='${list.tagName != "Concluidos"}'>
+                                    <button class="buttonStyle delete" id="${list.tagName}" name="deleteButton"><i class="glyphicon glyphicon-trash"></i></button>
+                                    <button class="buttonStyle editer" id="${list.tagName}" name="editButton"><i class="glyphicon glyphicon-cog"></i></button>
+                                </c:if>
                             </label>
                         </a></li>
                     </c:forEach>
