@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ public class CreateItem implements GenericProcess{
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
     
         String pageJSP = "";
+        List<Item> itemList;
         
         // Pegando usuário
         HttpSession session = req.getSession();
@@ -143,14 +145,26 @@ public class CreateItem implements GenericProcess{
                         req.getSession().setAttribute("error", error);
                         pageJSP = "/error.jsp";
                     } else {
+                        itemList = keepItem.listAllItem(user);
+                        if(itemList == null){
+                            req.setAttribute("itemList", new ArrayList());
+                        }else{
+                            req.setAttribute("itemList", itemList);
+                        }
                         pageJSP = "/index.jsp";
                     }
                 }    
             } else {
+                itemList = keepItem.listAllItem(user);
+                if(itemList == null){
+                    req.setAttribute("itemList", new ArrayList());
+                }else{
+                    req.setAttribute("itemList", itemList);
+                }
                 pageJSP = "/index.jsp";
             }
                 
-            }
+        }
         
         return pageJSP;
         

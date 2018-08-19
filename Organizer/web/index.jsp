@@ -43,7 +43,7 @@
                                         </li>
                                         <%
                                             if (request.getAttribute("itemList") == null) {
-                                                listItem = keepItem.listAllItem(userSessao);
+                                            //    deve ter algum erro
                                             } else {
                                                 listItem = (ArrayList) request.getAttribute("itemList");
                                             }
@@ -86,7 +86,6 @@
                                                                     <c:if test = "${list.descriptionItem != ''}">
                                                                         <li id="subItem" class="liDescricao">${list.descriptionItem}</li>
                                                                         </c:if>                                                                
-                                                                    <!-- tag <li class="liDescricao"></li>-->
                                                                     <c:if test = "${list.dateItem != null}">
                                                                         <li class="liDescricao" style="text-align: right">${list.dateItem}</li>
                                                                         </c:if>                                                                
@@ -103,7 +102,6 @@
                                                             <c:if test = "${list.descriptionItem != ''}">
                                                                 <li id="subItem" class="liDescricao">${list.descriptionItem}</li>
                                                                 </c:if>                                                                
-                                                            <!-- tag <li class="liDescricao"></li>-->
                                                             <c:if test = "${list.dateItem != null}">
                                                                 <li class="liDescricao" style="text-align: right">${list.dateItem}</li>
                                                                 </c:if> 
