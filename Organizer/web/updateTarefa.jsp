@@ -3,15 +3,14 @@
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.DateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
-<%@page import="br.cefetmg.inf.organizer.model.service.impl.KeepTag"%>
-<%@page import="br.cefetmg.inf.organizer.model.domain.User"%>
+<%@page import="br.cefetmg.inf.organizer.model.domain.Item"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean class="java.lang.Long" id="idItem" scope="session" ></jsp:useBean>
 <jsp:useBean class="java.lang.String" id="arrItemTag" scope="session" ></jsp:useBean>
 <%idItem = Long.parseLong(request.getSession().getAttribute("idItem").toString());
     arrItemTag = request.getSession().getAttribute("itemTag").toString();%>
-<jsp:useBean class="br.cefetmg.inf.organizer.model.service.impl.KeepItem" id="keepItem" scope="page" ></jsp:useBean>
 <jsp:useBean id='tagItem' class='java.util.ArrayList' scope="page"/>
+<jsp:useBean id='listItem' class='br.cefetmg.inf.organizer.model.domain.Item' scope="page"/>
 
 <!DOCTYPE html>
 <html>
@@ -47,17 +46,21 @@
 
                                     <h1 style="text-align:center">Tarefa</h1>
 
-                                    <c:set var = "item" scope = "page" value = "${keepItem.searchItemById(idItem)}"/>
+                                        <%
+                                            listItem = (Item) request.getAttribute("itemList");
+                                            
+                                            pageContext.setAttribute("objItem", listItem);                                            
+                                        %>
 
                                     <input type="hidden" value="${idItem}" name="getIdItem">
-                                    <input type="hidden" value="${item.identifierItem}" name="getIdentifierItem">
+                                    <input type="hidden" value="${objItem.identifierItem}" name="getIdentifierItem">
 
                                         <div class="form-group">
                                             <label class="col-md-3 col-xs-12 control-label">Nome: </label>
                                             <div class="col-md-6 col-xs-12">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input type="text" class="form-control" name="nameItem" value="${item.nameItem}"/>
+                                                    <input type="text" class="form-control" name="nameItem" value="${objItem.nameItem}"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -65,12 +68,12 @@
                                         <div class="form-group">
                                             <label class="col-md-3 col-xs-12 control-label">Descrição: </label>
                                             <div class="col-md-6 col-xs-12">
-                                              <textarea class="form-control" rows="5" name="descriptionItem">${item.descriptionItem}</textarea>
+                                              <textarea class="form-control" rows="5" name="descriptionItem">${objItem.descriptionItem}</textarea>
                                             </div>
                                         </div>
                                             
                                         <%
-                                            Date bdDate = keepItem.searchItemById(idItem).getDateItem();
+                                            Date bdDate = listItem.getDateItem();
                                             String strDate = "";
                                             if(bdDate != null){
                                                 DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
@@ -84,7 +87,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                                                     <c:choose>
-                                                        <c:when test = "${item.dateItem == null}">
+                                                        <c:when test = "${objItem.dateItem == null}">
                                                             <input type="date" class="form-control" name="dateItem">
                                                         </c:when>
                                                         <c:otherwise>
@@ -127,10 +130,10 @@
                     </div>
                     <div class="modal-body">
                         <%
-                            tagItem = keepTag.listAlltag(userSessao);
+                            tagItem = (ArrayList) request.getAttribute("tagList");
 
                             pageContext.setAttribute("list", tagItem);
-                        %>
+                        %>                        
                         <div class="form-group">
                             <label>Selecionados: </label>
                             <div class="input-group">

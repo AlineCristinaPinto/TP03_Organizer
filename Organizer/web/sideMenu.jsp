@@ -11,12 +11,15 @@
 
 <!DOCTYPE html>
 
+<form id="indexPageForm" action="/organizer/servletcontroller?process=LoadItem" method="post">
+</form>
+
 <div class="page-sidebar">
 
     <ul class="x-navigation">
 
         <li class="xn-logo">
-            <a href="index.jsp">Organizer</a>
+            <a id="indexPage">Organizer</a>
             <a href="#" class="x-navigation-control"></a>
         </li>
 

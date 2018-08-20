@@ -35,4 +35,9 @@ $(function() {
       formRegister.submit();
   });
 
+  $("#indexPage").click(function() {
+      let formRegister = document.querySelector("#indexPageForm");
+      formRegister.submit();
+  });
+
 })
