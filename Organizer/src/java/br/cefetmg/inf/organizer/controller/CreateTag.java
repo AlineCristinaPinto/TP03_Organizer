@@ -1,3 +1,4 @@
+/*
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -56,3 +57,4 @@ public class CreateTag implements GenericProcess {
         return pageJSP;
     }
 }
+*/

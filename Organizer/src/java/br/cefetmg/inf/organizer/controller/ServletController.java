@@ -21,9 +21,8 @@ public class ServletController extends HttpServlet {
 
    @Override
    protected void service(HttpServletRequest request,HttpServletResponse response) throws ServletException, UnsupportedEncodingException{
-       
        request.setCharacterEncoding("UTF-8");
-       
+
        String parameter = request.getParameter("process");//nome do campo que deve-se passar no form, seja por js ou html
        String className = "br.cefetmg.inf.organizer.controller." + parameter;
        

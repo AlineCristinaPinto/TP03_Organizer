@@ -1,3 +1,4 @@
+/*
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.User;
@@ -15,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Ruan Bertuce
- */
+
 public class UpdateBD implements GenericProcess{
 
     @Override
@@ -134,3 +132,4 @@ public class UpdateBD implements GenericProcess{
     }
     
 }
+*/

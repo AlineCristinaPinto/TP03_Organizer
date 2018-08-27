@@ -1,3 +1,4 @@
+/*
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.User;
@@ -66,7 +67,7 @@ public class LoadMax implements GenericProcess{
                     }
                 }
             }
-            /*
+           
             sql = "SELECT * FROM item_TAG";
             
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -80,7 +81,7 @@ public class LoadMax implements GenericProcess{
                     }
                 }
             }
-            */
+            
         } catch (Exception ex) {
             //exception
         }
@@ -99,3 +100,4 @@ public class LoadMax implements GenericProcess{
     }
     
 }
+*/

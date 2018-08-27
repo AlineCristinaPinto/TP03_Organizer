@@ -3,7 +3,7 @@ package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
-import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
+import br.cefetmg.inf.organizer.proxy.KeepUserProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.PasswordCriptography;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ public class CreateUser implements GenericProcess {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
         String pageJSP = "";
-
         String email = req.getParameter("email");
         String name = req.getParameter("name");
         String password = PasswordCriptography.generateMd5(req.getParameter("password"));
@@ -27,7 +26,7 @@ public class CreateUser implements GenericProcess {
         user.setUserPhoto(null);
         user.setCurrentTheme(1);
 
-        IKeepUser keepUser = new KeepUser();
+        IKeepUser keepUser = new KeepUserProxy();
         boolean success = keepUser.registerUser(user);
 
         if (!success) {

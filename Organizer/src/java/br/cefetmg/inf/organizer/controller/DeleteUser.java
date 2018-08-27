@@ -1,3 +1,4 @@
+/*
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.User;
@@ -42,3 +43,4 @@ public class DeleteUser implements GenericProcess {
     }
 
 }
+*/
