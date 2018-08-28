@@ -117,7 +117,7 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(receivedPackage.getContent().get(0), ArrayList.class);
+            return json.fromJson(reader, ArrayList.class);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,7 +145,7 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(receivedPackage.getContent().get(0), ArrayList.class);
+            return json.fromJson(reader, ArrayList.class);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,7 +173,7 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(receivedPackage.getContent().get(0), ArrayList.class);
+            return json.fromJson(reader, ArrayList.class);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -201,7 +201,7 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(receivedPackage.getContent().get(0), ArrayList.class);
+            return json.fromJson(reader, ArrayList.class);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);

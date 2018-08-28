@@ -2,10 +2,13 @@ package br.cefetmg.inf.organizer.adapter;
 
 import br.cefetmg.inf.organizer.dist.ServerDistribution;
 import br.cefetmg.inf.organizer.model.domain.Item;
+import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
+import br.cefetmg.inf.organizer.model.service.IKeepMaxData;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
 import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
+import br.cefetmg.inf.organizer.model.service.impl.KeepMaxData;
 import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
 import br.cefetmg.inf.util.PackageShredder;
 import br.cefetmg.inf.util.PseudoPackage;
@@ -76,10 +79,12 @@ public class ServiceAdapterThread  implements Runnable{
         boolean confirm;
         PseudoPackage responsePackage;
         List<String> jsonContent;
-        User user;        
+        User user;    
+        MaxDataObject maxDataObject;
         IKeepUser keepUser;
         Item item;
         IKeepItem keepItem;
+        IKeepMaxData keepMaxData;
         
         switch (requestType) {
             case REGISTERUSER:
@@ -132,7 +137,91 @@ public class ServiceAdapterThread  implements Runnable{
                 responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
                 
                 prepareToSend(responsePackage);                    
+                break;  
+                
+            case LOADITEMS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadItems(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break; 
+                
+            case LOADTAGS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadTags(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
                 break;
+                
+            case LOADTAGSITEMS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadTagsItems(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;   
+                
+            case LOADITEMSTAGS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadItemsTags(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;
+                
+            case UPDATEALLITEMS:
+                
+                maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(keepMaxData.updateAllItems(maxDataObject)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;  
+                
+            case UPDATEALLTAGS:
+                
+                maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(keepMaxData.updateAllTags(maxDataObject)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;  
+                
+            case UPDATEALLITEMTAG:
+                
+                maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(keepMaxData.updateAllItemTag(maxDataObject)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;      
             default:
             //exception
         }

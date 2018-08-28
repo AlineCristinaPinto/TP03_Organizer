@@ -21,21 +21,6 @@ public class KeepMaxData implements IKeepMaxData {
     }
     
     //Não existem regras de negócio pois essas funções servem para alterar o BD real baseado no BD simulado do assistente MAX. Em caso de dúvidas contate os membros do grupo;
-    
-    @Override
-    public boolean updateAllItems(MaxDataObject maxDataObject) throws PersistenceException {    
-        return maxDAO.updateAllItems(maxDataObject); 
-    }
-
-    @Override
-    public boolean updateAllTags(MaxDataObject maxDataObject) throws PersistenceException {        
-        return maxDAO.updateAllTags(maxDataObject);
-    }
-
-    @Override
-    public boolean updateAllItemTag(MaxDataObject maxDataObject) throws PersistenceException {
-        return maxDAO.updateAllItemTag(maxDataObject);
-    }
 
     @Override
     public ArrayList<Item> loadItems(User user) throws PersistenceException {
@@ -55,6 +40,21 @@ public class KeepMaxData implements IKeepMaxData {
     @Override
     public ArrayList<String> loadItemsTags(User user) throws PersistenceException {
         return maxDAO.loadItemsTags(user);
+    }
+    
+        @Override
+    public boolean updateAllItems(MaxDataObject maxDataObject) throws PersistenceException {    
+        return maxDAO.updateAllItems(maxDataObject); 
+    }
+
+    @Override
+    public boolean updateAllTags(MaxDataObject maxDataObject) throws PersistenceException {        
+        return maxDAO.updateAllTags(maxDataObject);
+    }
+
+    @Override
+    public boolean updateAllItemTag(MaxDataObject maxDataObject) throws PersistenceException {
+        return maxDAO.updateAllItemTag(maxDataObject);
     }
    
 }
