@@ -81,7 +81,6 @@ public class ServiceAdapterThread  implements Runnable{
         
         switch (requestType) {
             case REGISTERUSER:
-                
                 user = gson.fromJson(contentPackage.getContent().get(0), User.class);
                 keepUser = new KeepUser();
                 confirm = keepUser.registerUser(user);
@@ -92,7 +91,53 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;
-            
+            case SEARCHUSER:
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepUser = new KeepUser();
+                
+                User foundUser = keepUser.searchUser(user);
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(foundUser));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+               
+                prepareToSend(responsePackage);    
+                break;
+            case UPDATEUSER:
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepUser = new KeepUser();
+                confirm = keepUser.updateUser(user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);  
+                break;
+            case DELETEACCOUNT:
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepUser = new KeepUser();
+                confirm = keepUser.deleteAccount(user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);  
+                break;
+            case GETUSERLOGIN:    
+                String emailUser = contentPackage.getContent().get(0);
+                String userPassword = contentPackage.getContent().get(1);
+                
+                keepUser = new KeepUser();
+                user = keepUser.getUserLogin(emailUser, userPassword);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(user));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+               
+                prepareToSend(responsePackage);    
+                break;
+                
             case CREATEITEM:
                 
                 item = gson.fromJson(contentPackage.getContent().get(0), Item.class);

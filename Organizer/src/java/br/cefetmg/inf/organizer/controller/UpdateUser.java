@@ -1,9 +1,9 @@
-/*
+
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
-import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
+import br.cefetmg.inf.organizer.proxy.KeepUserProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.PasswordCriptography;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ public class UpdateUser implements GenericProcess {
         tempUser.setUserPassword(password);
         tempUser.setCurrentTheme(user.getCurrentTheme());
 
-        IKeepUser keepUser = new KeepUser();
+        IKeepUser keepUser = new KeepUserProxy();
         boolean success = keepUser.updateUser(tempUser);
         if (!success) {
             ErrorObject error = new ErrorObject();
@@ -54,4 +54,3 @@ public class UpdateUser implements GenericProcess {
     }
 
 }
-*/
