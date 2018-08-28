@@ -5,12 +5,17 @@
 */
 package br.cefetmg.inf.organizer.controller;
 
+import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
 import br.cefetmg.inf.organizer.model.domain.User;
+import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepMaxData;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
 import br.cefetmg.inf.organizer.proxy.KeepMaxDataProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -64,8 +69,17 @@ public class UpdateMaxBD implements GenericProcess{
         boolean itemSuccess = keepMaxData.updateAllItems(maxDataObject);//PARAMETROS
         boolean tagSuccess = keepMaxData.updateAllTags(maxDataObject);//PARAMETROS
         
+        List<Item> itemList;
+        IKeepItem keepItem = new KeepItemProxy();
         
-        if(itemSuccess && tagSuccess && itemTagSuccess){
+        itemList = keepItem.listAllItem(user);
+        if(itemList == null){
+            req.setAttribute("itemList", new ArrayList());
+        }else{
+            req.setAttribute("itemList", itemList);
+        }
+        
+        if(itemSuccess && tagSuccess && itemTagSuccess){          
             pageJSP = "/index.jsp";
         }else{
             ErrorObject error = new ErrorObject();
