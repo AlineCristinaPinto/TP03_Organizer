@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
-
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +23,16 @@ public class DeleteItem implements GenericProcess{
         List<Item> itemList;
         
         // Pegando usuário
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
+        //HttpSession session = req.getSession();
+        //User user = (User) session.getAttribute("user");
+        
+        User user = new User();
+        user.setCodEmail("aline@gmail.com");
       
         String idItemString = req.getParameter("takeId");
         Long idItem = Long.parseLong(idItemString); 
        
-        IKeepItem keepItem = new KeepItem();
+        IKeepItem keepItem = new KeepItemProxy();
         boolean result = keepItem.deleteItem(idItem, user);
        
         if(result == false){
@@ -46,7 +44,7 @@ public class DeleteItem implements GenericProcess{
             pageJSP = "/error.jsp";
         } else {
             
-            IKeepItemTag keepItemTag = new KeepItemTag();
+            IKeepItemTag keepItemTag = new KeepItemTagProxy();
             result = keepItemTag.deleteTagByItemId(idItem);
             
             if(result == false){
@@ -72,7 +70,5 @@ public class DeleteItem implements GenericProcess{
         
         return pageJSP;
         
-    }
-    
+    }    
 }
-*/

@@ -59,7 +59,27 @@ public class KeepItemProxy implements IKeepItem {
 
     @Override
     public boolean deleteItem(Long idItem, User user) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PseudoPackage contentPackage;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(idItem));
+        jsonContent.add(json.toJson(user));
+        
+        RequestType requestType = RequestType.DELETEITEM;
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            return Boolean.valueOf(receivedPackage.getContent().get(0));
+           
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        return false;
     }
 
     @Override
@@ -73,6 +93,8 @@ public class KeepItemProxy implements IKeepItem {
         jsonContent = new ArrayList();
         jsonContent.add(json.toJson(user));
         
+        ArrayList<Item> arr;
+        
         RequestType requestType = RequestType.LISTALLITEM;
         contentPackage = new PseudoPackage(requestType, jsonContent);
         
@@ -82,7 +104,9 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(receivedPackage.getContent().get(0), ArrayList.class);
+            arr = json.fromJson(reader, ArrayList.class);
+            
+            return arr;
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);

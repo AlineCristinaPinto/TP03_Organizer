@@ -47,7 +47,7 @@ public class PackageShredder {
                         auxStr = packageIndex + symbol;
                         finalIndex = firstIndex + BYTE_LENGTH - (packageIndex + symbol).length();
                         auxStr += pseudoPackage.substring(firstIndex, finalIndex);
-                        byteMatrix[packageIndex] = Arrays.copyOfRange(auxStr.getBytes(), 0, auxStr.length());
+                        byteMatrix[packageIndex] = auxStr.getBytes();
                         firstIndex = finalIndex;
                         packageIndex++;
                     }
@@ -56,8 +56,7 @@ public class PackageShredder {
             //preenche os bytes que sobraram
             auxStr = packageIndex + symbol;
             auxStr += pseudoPackage.substring(firstIndex, pseudoPackage.length());
-            byteMatrix[packageIndex] = Arrays.copyOfRange(auxStr.getBytes(), 0, auxStr.length());
-
+            byteMatrix[packageIndex] = auxStr.getBytes();
         } else {
             //se apenas 1 pacote for enviado, nao divide nem coloca cabecalho
             byte[][] returnByte = new byte[1][BYTE_LENGTH];
@@ -96,6 +95,8 @@ public class PackageShredder {
                 auxStr = new String(byteMatrixSort[i]);
                 auxStr = auxStr.substring(auxStr.indexOf("&") + 1, auxStr.length());
                 concat += auxStr;
+                System.out.println("byteMatrixSort[" +i +"]: " +new String(byteMatrixSort[i]));
+                System.out.println("auxStr: " +auxStr);
             }
             return concat;
         }else{

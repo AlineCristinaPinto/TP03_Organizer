@@ -32,9 +32,12 @@ public class CreateItem implements GenericProcess{
         List<Item> itemList;
         
         // Pegando usuário
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
-                       
+        //HttpSession session = req.getSession();
+        //User user = (User) session.getAttribute("user");
+        
+        User user = new User();
+        user.setCodEmail("aline@gmail.com");
+                  
         // Pega os dados dos inputs
         String selectType = req.getParameter("selectType");
         String name = req.getParameter("nameItem");
@@ -151,6 +154,10 @@ public class CreateItem implements GenericProcess{
                 }    
             } else {
                 itemList = keepItem.listAllItem(user);
+                /*for(Item itemIterator: itemList){
+                    Long value = (Long)itemIterator.getSeqItem();
+                    itemIterator.setSeqItem(value);
+                }*/
                 if(itemList == null){
                     req.setAttribute("itemList", new ArrayList());
                 }else{
