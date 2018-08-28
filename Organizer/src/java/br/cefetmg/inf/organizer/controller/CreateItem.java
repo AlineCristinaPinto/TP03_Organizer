@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
-
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -12,9 +7,11 @@ import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
+//import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
+//import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
+//import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
 import br.cefetmg.inf.util.ErrorObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,8 +34,7 @@ public class CreateItem implements GenericProcess{
         // Pegando usuário
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-                
-       
+                       
         // Pega os dados dos inputs
         String selectType = req.getParameter("selectType");
         String name = req.getParameter("nameItem");
@@ -61,8 +57,10 @@ public class CreateItem implements GenericProcess{
             
         if(!tag.isEmpty()){
             String[] vetTag = tag.split(";");
+           
+            // Esperar Proxy do Pedro Lucas
             
-            IKeepTag keepTag = new KeepTag();
+            /*IKeepTag keepTag = new KeepTag();
 
             for (String vetTag1 : vetTag) {
                 if (keepTag.searchTagByName(vetTag1.trim(), user) == null) {
@@ -76,7 +74,7 @@ public class CreateItem implements GenericProcess{
 
                     tagItem.add(tagOfUser);
                 }
-            }
+            }*/
         }
         
         // Instanciando item para inserir
@@ -95,11 +93,11 @@ public class CreateItem implements GenericProcess{
             item.setIdentifierStatus(null);
         }
         
-        // Inserção do item mas sem a tag
-        IKeepItem keepItem = new KeepItem();
+        // Inserção do item mas sem a tag        
+        IKeepItem keepItem = new KeepItemProxy();
         boolean result = keepItem.createItem(item);
         
-        if(result == false){
+        if(!result){
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Item já existe");
@@ -130,11 +128,11 @@ public class CreateItem implements GenericProcess{
                     itemTag.setListTags(tagItem);
                 
                     // enfim adicionando as tags do item
-                    IKeepItemTag keepItemTag = new KeepItemTag();
-                
+                    // Lembrar de fazer o Proxy
+                    IKeepItemTag keepItemTag = new KeepItemTagProxy();                
                     result = keepItemTag.createTagInItem(itemTag);
                 
-                    if(result == false){
+                    if(!result){
                         ErrorObject error = new ErrorObject();
                         error.setErrorName("Tente novamente");
                         error.setErrorDescription("Erro Interno 505");
@@ -167,5 +165,5 @@ public class CreateItem implements GenericProcess{
         
     }
 }
-*/
+
 

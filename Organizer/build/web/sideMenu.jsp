@@ -1,11 +1,9 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="br.cefetmg.inf.organizer.model.service.impl.KeepTag"%>
 <%@page import="br.cefetmg.inf.organizer.model.domain.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <jsp:useBean id='listTag' class='java.util.ArrayList' scope="page"/>
-<jsp:useBean id="keepTag" class="br.cefetmg.inf.organizer.model.service.impl.KeepTag" scope="page"/>
 <jsp:useBean class="br.cefetmg.inf.organizer.model.domain.User" id="userSessao" scope="page" ></jsp:useBean>
 <%userSessao = (User) request.getSession().getAttribute("user");%>
 
@@ -88,7 +86,7 @@
                 <c:forEach items='${listTypes}' var='list'>
                     <li><a href="#">                                        
                             <label class="container">${list}
-                                <input type="checkbox" name="tipo" value="${fn:substring(fn:toUpperCase(list), 0, 3)}"
+                               <input type="checkbox" name="tipo" value="${fn:substring(fn:toUpperCase(list), 0, 3)}"
                                        <c:forEach items='${usedTypes}' var='usedType'>
                                            <c:if test='${fn:substring(fn:toUpperCase(list), 0, 3) == usedType}'>
                                                checked="true"
@@ -104,7 +102,7 @@
 
         <li class="xn-openable">
             <a href="#"><span class="fa fa-tag"></span> <span class="xn-text">Tags</span></a>
-            <%                listTag = keepTag.listAlltag(userSessao);
+            <%               // listTag = keepTag.listAlltag(userSessao);
 
                 String[] usedTags = request.getParameterValues("tag");
 

@@ -1,11 +1,7 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="br.cefetmg.inf.organizer.model.service.impl.KeepTag"%>
-<%@page import="br.cefetmg.inf.organizer.model.service.impl.KeepItem"%>
-<%@page import="br.cefetmg.inf.organizer.model.domain.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
+<%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id='listItem' class='java.util.ArrayList' scope="page"/>
-<jsp:useBean id="keepItem" class="br.cefetmg.inf.organizer.model.service.impl.KeepItem" scope="page"/>
 
 <html>
     <head>
@@ -138,14 +134,14 @@
                             <input type="hidden" id="takeIdU" name="takeIdU">
                             <input type="hidden" id="takeTypeU" name="takeTypeU">
                             <a class="opItemModal edit">
-                                <span class="fa fa-edit"></span> Editar</span>
+                                <span class="fa fa-edit"></span> Editar
                             </a>
                         </form>
                         <hr>
                         <form id="deleteItem" method="post">
                             <input type="hidden" id="takeId" name="takeId">
                             <a href="#" class="opItemModal delItem">                        
-                                <span class="fa fa-trash-o"></span> Excluir</span>
+                                <span class="fa fa-trash-o"></span> Excluir
                             </a>
                         </form>
                     </div>
@@ -165,7 +161,7 @@
                         <form id="deleteItem" method="post">
                             <input type="hidden" id="takeId" name="takeId">
                             <a href="#" class="opItemModal delItem">                        
-                                <span class="fa fa-trash-o"></span> Excluir</span>
+                                <span class="fa fa-trash-o"></span> Excluir
                             </a>
                         </form>
                     </div>

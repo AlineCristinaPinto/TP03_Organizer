@@ -1,6 +1,5 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="br.cefetmg.inf.organizer.model.domain.User"%>
-<%@page import="br.cefetmg.inf.organizer.model.service.impl.KeepTag"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:useBean id='tagItem' class='java.util.ArrayList' scope="page"/>
@@ -123,9 +122,8 @@
                                     <ul id="ulTags">
 
                                         <%
-
-                                            KeepTag keepTag1 = new KeepTag();
-                                            tagItem = keepTag1.listAlltag(userSessao);
+                                               // Lembrar de passar pra requisição
+                                            tagItem = (ArrayList) request.getAttribute("tagList");
 
                                             pageContext.setAttribute("list", tagItem);
                                         %>
