@@ -2,13 +2,13 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
-
+*/
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepMaxData;
-import br.cefetmg.inf.organizer.model.service.impl.KeepMaxData;
+import br.cefetmg.inf.organizer.proxy.KeepMaxDataProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +58,7 @@ public class UpdateMaxBD implements GenericProcess{
         maxDataObject.setTagsItems(tagsItems);
         maxDataObject.setItemsTags(itemsTags);
         
-        IKeepMaxData keepMaxData = new KeepMaxData();
+        IKeepMaxData keepMaxData = new KeepMaxDataProxy();
         
         boolean itemTagSuccess = keepMaxData.updateAllItemTag(maxDataObject);//PARAMETROS
         boolean itemSuccess = keepMaxData.updateAllItems(maxDataObject);//PARAMETROS
@@ -80,4 +80,3 @@ public class UpdateMaxBD implements GenericProcess{
     }
     
 }
-*/

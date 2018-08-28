@@ -1,12 +1,14 @@
-
 package br.cefetmg.inf.organizer.model.service.impl;
 
 import br.cefetmg.inf.organizer.model.dao.IMaxDAO;
 import br.cefetmg.inf.organizer.model.dao.impl.MaxDAO;
+import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
+import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepMaxData;
 import br.cefetmg.inf.util.exception.PersistenceException;
+import java.util.ArrayList;
 
 
 
@@ -34,5 +36,25 @@ public class KeepMaxData implements IKeepMaxData {
     public boolean updateAllItemTag(MaxDataObject maxDataObject) throws PersistenceException {
         return maxDAO.updateAllItemTag(maxDataObject);
     }
-    
+
+    @Override
+    public ArrayList<Item> loadItems(User user) throws PersistenceException {
+        return maxDAO.loadItems(user);
+    }
+
+    @Override
+    public ArrayList<Tag> loadTags(User user) throws PersistenceException {
+        return maxDAO.loadTags(user);
+    }
+
+    @Override
+    public ArrayList<String> loadTagsItems(User user) throws PersistenceException {
+        return maxDAO.loadTagsItems(user);
+    }
+
+    @Override
+    public ArrayList<String> loadItemsTags(User user) throws PersistenceException {
+        return maxDAO.loadItemsTags(user);
+    }
+   
 }
