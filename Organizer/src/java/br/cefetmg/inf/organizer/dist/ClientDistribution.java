@@ -49,26 +49,31 @@ public class ClientDistribution {
         byte[] receiveData = new byte[BYTE_LENGTH];
         Gson gson = new Gson();
 
+        //transforma o pseudoPackage com os dados a serem enviados em pacotes de byte
         String jsonObject = gson.toJson(pseudoPackage);
         PackageShredder packageShredder = new PackageShredder();
 
         sendData = packageShredder.fragment(jsonObject);
 
+        //cria um pseudoPackage contendo o numero de pacotes de dados que serao enviados
         PseudoPackage contentPackage;
         List<String> jsonContent;
         jsonContent = new ArrayList();
         jsonContent.add(String.valueOf(sendData.length));
 
+        //transforma o pseudoPackage que contem o numero de pacotes em matriz de bytes
         RequestType requestType = RequestType.NUMPACKAGE;
         contentPackage = new PseudoPackage(requestType, jsonContent);
         numPackage = packageShredder.fragment(gson.toJson(contentPackage));
 
+        //envia o numero de pacotes para o servidor
         for (byte[] numPackage1 : numPackage) {
             DatagramPacket sendPacketLenght = new DatagramPacket(numPackage1,
                     numPackage1.length, IPAddress, porta);
             clientSocket.send(sendPacketLenght);
         }
 
+        //recebe um boolean do servidor confirmando se o numero de pacotes chegou com sucesso
         DatagramPacket receiveConfirmation = new DatagramPacket(receiveData,
                 receiveData.length);
 
@@ -79,18 +84,23 @@ public class ClientDistribution {
         reader.setLenient(true);
         PseudoPackage confirmationPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
-        if (Boolean.valueOf(confirmationPackage.getContent().get(0))&& 
+        
+        //se o numero de pacotes tiver chegado com sucesso
+        if (Boolean.valueOf(confirmationPackage.getContent().get(0)) && 
                 confirmationPackage.getRequestType().equals(RequestType.CONFIRMATIONPACKAGE)) {
-
+            
+            //percorre a matriz de bytes e envia os vetores de bytes contendo 
+            //os dados ao servidor
             for (byte[] sendData1 : sendData) {
                 DatagramPacket sendPackage = new DatagramPacket(sendData1,
                         sendData1.length, IPAddress, porta);
                 clientSocket.send(sendPackage);
             }
         } else {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            System.out.println("Exceção: o número de pacotes não chegou ao servidor");
         }
 
+        //recebe do servidor o numero de pacotes que serao enviados como resposta
         DatagramPacket receivedFromServerLength = new DatagramPacket(receiveData,
                 receiveData.length);
 
@@ -102,9 +112,13 @@ public class ClientDistribution {
         PseudoPackage receivedFromServerLengthPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
         
+        //transforma o numero de pacotes de resposta em int
         int numPackages = Integer.parseInt(receivedFromServerLengthPackage.getContent().get(0));
+        
+        //matriz de byte que recebera os pacotes de resposta
         byte [][] fragmentedPackage = new byte [numPackages][BYTE_LENGTH];
         
+        //recebe os pacotes e os armazena na matriz de byte
         for (int i = 0; i < numPackages; i++) {
             DatagramPacket receivedFromServer = new DatagramPacket(receiveData,
                     receiveData.length);
@@ -113,11 +127,15 @@ public class ClientDistribution {
             fragmentedPackage[i] = receivedFromServer.getData();
         }
         
+        //desfragmenta, ordena os pacotes recebidos e os converte novamente para
+        //um pseudoPackage
         String receivedObject = packageShredder.defragment(fragmentedPackage);
         reader = new JsonReader(new StringReader(receivedObject));
         reader.setLenient(true);
         PseudoPackage returnPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
+        
+        //retorna o resultado
         return returnPackage;
     }
 

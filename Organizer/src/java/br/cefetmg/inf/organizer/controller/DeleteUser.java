@@ -1,9 +1,9 @@
-/*
+
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
-import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
+import br.cefetmg.inf.organizer.proxy.KeepUserProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.PasswordCriptography;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class DeleteUser implements GenericProcess {
         if (!(password.equals(user.getUserPassword()))) {
             //erro, tratar depois
         } else {
-            IKeepUser keepUser = new KeepUser();
+            IKeepUser keepUser = new KeepUserProxy();
             boolean success = keepUser.deleteAccount(user);
             if (!success) {
                 ErrorObject error = new ErrorObject();
@@ -43,4 +43,3 @@ public class DeleteUser implements GenericProcess {
     }
 
 }
-*/

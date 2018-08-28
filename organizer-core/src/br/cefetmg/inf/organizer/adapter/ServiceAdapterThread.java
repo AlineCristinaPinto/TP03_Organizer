@@ -2,12 +2,15 @@ package br.cefetmg.inf.organizer.adapter;
 
 import br.cefetmg.inf.organizer.dist.ServerDistribution;
 import br.cefetmg.inf.organizer.model.domain.Item;
+import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
+import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
+import br.cefetmg.inf.organizer.model.service.IKeepMaxData;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
 import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
+import br.cefetmg.inf.organizer.model.service.impl.KeepMaxData;
 import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
 import br.cefetmg.inf.util.PackageShredder;
 import br.cefetmg.inf.util.PseudoPackage;
@@ -66,7 +69,9 @@ public class ServiceAdapterThread  implements Runnable{
         RequestType requestTypeAux = RequestType.NUMPACKAGE;
         numPackage = new PseudoPackage(requestTypeAux, jsonContentAux);
 
+        //primeiramente envia o numero de pacotes de resposta ao cliente
         ServerDistribution.sendData(IPAddress, clientPort, numPackage);
+        //depois, envia os dados em si
         ServerDistribution.sendData(IPAddress, clientPort, responsePackage);
                 
     }
@@ -76,15 +81,16 @@ public class ServiceAdapterThread  implements Runnable{
         boolean confirm;
         PseudoPackage responsePackage;
         List<String> jsonContent;
-        User user;        
+        User user;    
+        MaxDataObject maxDataObject;
         IKeepUser keepUser;
         Item item;
         IKeepItem keepItem;
         IKeepItemTag keepItemTag;
+        IKeepMaxData keepMaxData;
         
         switch (requestType) {
             case REGISTERUSER:
-                
                 user = gson.fromJson(contentPackage.getContent().get(0), User.class);
                 keepUser = new KeepUser();
                 confirm = keepUser.registerUser(user);
@@ -95,7 +101,53 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;
-            
+            case SEARCHUSER:
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepUser = new KeepUser();
+                
+                User foundUser = keepUser.searchUser(user);
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(foundUser));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+               
+                prepareToSend(responsePackage);    
+                break;
+            case UPDATEUSER:
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepUser = new KeepUser();
+                confirm = keepUser.updateUser(user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);  
+                break;
+            case DELETEACCOUNT:
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepUser = new KeepUser();
+                confirm = keepUser.deleteAccount(user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);  
+                break;
+            case GETUSERLOGIN:    
+                String emailUser = contentPackage.getContent().get(0);
+                String userPassword = contentPackage.getContent().get(1);
+                
+                keepUser = new KeepUser();
+                user = keepUser.getUserLogin(emailUser, userPassword);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(user));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+               
+                prepareToSend(responsePackage);    
+                break;
+                
             case CREATEITEM:
                 
                 item = gson.fromJson(contentPackage.getContent().get(0), Item.class);
@@ -133,8 +185,56 @@ public class ServiceAdapterThread  implements Runnable{
                 responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
                 
                 prepareToSend(responsePackage);                    
+                break;  
+                
+            case LOADITEMS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadItems(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break; 
+                
+            case LOADTAGS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadTags(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
                 break;
-            
+                
+            case LOADTAGSITEMS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadTagsItems(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;   
+                
+            case LOADITEMSTAGS:
+                
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(keepMaxData.loadItemsTags(user)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;
+
             case DELETEITEM:
                 
                 Long idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
@@ -161,6 +261,42 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;
+    
+            case UPDATEALLITEMS:
+                
+                maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(keepMaxData.updateAllItems(maxDataObject)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;  
+                
+            case UPDATEALLTAGS:
+                
+                maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(keepMaxData.updateAllTags(maxDataObject)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;  
+                
+            case UPDATEALLITEMTAG:
+                
+                maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);
+                keepMaxData = new KeepMaxData();
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(keepMaxData.updateAllItemTag(maxDataObject)));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;   
                 
             default:
             //exception

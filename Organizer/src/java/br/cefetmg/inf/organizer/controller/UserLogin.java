@@ -1,4 +1,4 @@
-/*
+
 package br.cefetmg.inf.organizer.controller;
 
 
@@ -6,8 +6,8 @@ import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepUserProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.PasswordCriptography;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class UserLogin implements GenericProcess{
         String email = req.getParameter("email");
         String password = PasswordCriptography.generateMd5(req.getParameter("password"));
         
-        IKeepUser keepUser = new KeepUser();
+        IKeepUser keepUser = new KeepUserProxy();
         User user = keepUser.getUserLogin(email, password);
         
         if(user == null){
@@ -41,7 +41,7 @@ public class UserLogin implements GenericProcess{
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
             
-            IKeepItem keepItem = new KeepItem();
+            IKeepItem keepItem = new KeepItemProxy();
             itemList = keepItem.listAllItem(user);
             if(itemList == null){
                 req.setAttribute("itemList", new ArrayList());
@@ -56,4 +56,3 @@ public class UserLogin implements GenericProcess{
     }
     
 }
-*/

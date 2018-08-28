@@ -1,14 +1,18 @@
 package br.cefetmg.inf.organizer.model.dao.impl;
 
 import br.cefetmg.inf.organizer.model.dao.IMaxDAO;
+import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
+import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.util.db.ConnectionManager;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MaxDAO implements IMaxDAO {
@@ -132,6 +136,80 @@ public class MaxDAO implements IMaxDAO {
             ex.printStackTrace();
             throw new PersistenceException(ex.getMessage(), ex);
         }
+    }
+
+    @Override
+    public ArrayList<Item> loadItems(User user) throws PersistenceException {
+        ArrayList<Item> listAllItem = null;
+        ItemDAO itemControl = new ItemDAO();
+        if(itemControl.listAllItem( user ) != null)
+            listAllItem = itemControl.listAllItem( user );
+        return listAllItem; 
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<Tag> loadTags(User user) throws PersistenceException {
+        ArrayList<Tag> listAlltag = null;
+        TagDAO tagControl = new TagDAO();
+        listAlltag = tagControl.listAlltag( user );
+        return listAlltag;
+    }
+
+    @Override
+    public ArrayList<String> loadTagsItems(User user) throws PersistenceException {
+        ArrayList<String> listAllTagsItems = new ArrayList<>();
+        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+            
+            String sql = 
+            "SELECT A.nom_item, C.nom_tag FROM item A JOIN item_tag B ON (A.seq_item = B.seq_item) "
+                    + "JOIN tag C ON (B.seq_tag = C.seq_tag) WHERE A.cod_email = ? AND C.cod_email = ?";
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                
+                preparedStatement.setString(1, user.getCodEmail());
+                preparedStatement.setString(2, user.getCodEmail());
+                
+                try (ResultSet result = preparedStatement.executeQuery()) {
+                    if (result.next()) {
+                        do {
+                            listAllTagsItems.add( result.getString("nom_item") );
+                        } while (result.next());
+                    }
+                }
+            }           
+        } catch (Exception ex) {
+            //exception
+        }
+        return listAllTagsItems;
+    }
+
+    @Override
+    public ArrayList<String> loadItemsTags(User user) throws PersistenceException {
+        ArrayList<String> listAllItemsTags = new ArrayList<>();
+        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+            
+            String sql = 
+            "SELECT A.nom_item, C.nom_tag FROM item A JOIN item_tag B ON (A.seq_item = B.seq_item) "
+                    + "JOIN tag C ON (B.seq_tag = C.seq_tag) WHERE A.cod_email = ? AND C.cod_email = ?";
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                
+                preparedStatement.setString(1, user.getCodEmail());
+                preparedStatement.setString(2, user.getCodEmail());
+                
+                try (ResultSet result = preparedStatement.executeQuery()) {
+                    if (result.next()) {
+                        do {
+                            listAllItemsTags.add( result.getString("nom_tag") );
+                        } while (result.next());
+                    }
+                }
+            }           
+        } catch (Exception ex) {
+            //exception
+        }
+        return listAllItemsTags;
     }
 
 }
