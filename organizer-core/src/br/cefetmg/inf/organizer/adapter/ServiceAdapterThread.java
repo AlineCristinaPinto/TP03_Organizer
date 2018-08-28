@@ -64,7 +64,9 @@ public class ServiceAdapterThread  implements Runnable{
         RequestType requestTypeAux = RequestType.NUMPACKAGE;
         numPackage = new PseudoPackage(requestTypeAux, jsonContentAux);
 
+        //primeiramente envia o numero de pacotes de resposta ao cliente
         ServerDistribution.sendData(IPAddress, clientPort, numPackage);
+        //depois, envia os dados em si
         ServerDistribution.sendData(IPAddress, clientPort, responsePackage);
                 
     }

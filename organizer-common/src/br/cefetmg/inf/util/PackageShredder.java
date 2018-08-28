@@ -39,6 +39,8 @@ public class PackageShredder {
             System.out.println("bytes+header length : " + totalLength);
             System.out.println("byteMatrix length : " + byteMatrix.length);
 
+            //divide a String recebida em pacotes de bytes e escreve um cabecalho
+            //indicando o indice do pacote
             if (totalLength > BYTE_LENGTH) {
                 for (int i = 1; i < totalLength; i++) {
                     if (i % BYTE_LENGTH == 0) {
@@ -57,6 +59,7 @@ public class PackageShredder {
             byteMatrix[packageIndex] = Arrays.copyOfRange(auxStr.getBytes(), 0, auxStr.length());
 
         } else {
+            //se apenas 1 pacote for enviado, nao divide nem coloca cabecalho
             byte[][] returnByte = new byte[1][BYTE_LENGTH];
             returnByte[0] = pseudoPackage.getBytes();
             return returnByte;
@@ -68,6 +71,7 @@ public class PackageShredder {
     public String defragment(byte[][] byteMatrix) {
 
         if (byteMatrix.length > 1) {
+            //matriz de byte em ordem
             byte[][] byteMatrixSort = new byte[byteMatrix.length][byteMatrix[0].length];
 
             for (int i = 0; i < byteMatrix.length; i++) {
@@ -79,10 +83,13 @@ public class PackageShredder {
                 }
 
                 header = header.substring(0, header.indexOf("&"));
+                //e' sabido que o numero no cabecalho de cada pacote e' igual ao
+                //indice deste na matriz ordenada
                 byteMatrixSort[Integer.parseInt(header)] = byteMatrix[i];
 
             }
 
+            //transforma a matriz de byte ordenada em uma String
             String concat = "";
             String auxStr = "";
             for (int i = 0; i < byteMatrixSort.length; i++) {

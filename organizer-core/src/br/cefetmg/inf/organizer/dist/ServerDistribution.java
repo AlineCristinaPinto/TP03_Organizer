@@ -37,6 +37,7 @@ public class ServerDistribution {
         Gson gson = new Gson();
         PackageShredder packageShredder = new PackageShredder();
 
+        //espera ate que algum cliente envie uma requisicao
         DatagramPacket receivePacket = new DatagramPacket(receiveData,
                 receiveData.length);
         serverSocket.receive(receivePacket);
@@ -44,12 +45,17 @@ public class ServerDistribution {
         InetAddress IPAddress = receivePacket.getAddress();
         int clientPort = receivePacket.getPort();
 
+        //transforma o pacote recebido em um pseudoPackage contendo o numero
+        //de pacotes que serao enviados pelo cliente posteriormente
         String receivedLength = new String(receivePacket.getData());
         reader = new JsonReader(new StringReader(receivedLength));
         reader.setLenient(true);
         PseudoPackage lengthPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
+        
+        //se o tipo de requisicao recebida for o numero de pacotes
         if (lengthPackage.getRequestType().equals(RequestType.NUMPACKAGE)) {
+            //transforma o numero de pacotes em int
             int numPackages = Integer.parseInt(lengthPackage.getContent().get(0));
 
             PseudoPackage confirmationPackage;
@@ -57,6 +63,8 @@ public class ServerDistribution {
             jsonContent = new ArrayList();
             jsonContent.add("true");
 
+            //se tiver recebido corretamente o numero de pacotes, envia ao
+            //cliente um booleano confirmando esta acao
             confirmationPackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
             sendData = packageShredder.fragment(gson.toJson(confirmationPackage));
 
@@ -65,8 +73,10 @@ public class ServerDistribution {
 
             serverSocket.send(sendPacketConfirmation);
 
+            //matriz de byte que recebera os pacotes com os dados
             byte[][] fragmentedPackage = new byte[numPackages][BYTE_LENGTH];
 
+            //recebe os pacotes enviados pelo cliente contendo os dados
             for (int i = 0; i < numPackages; i++) {
                 DatagramPacket receivedFromClient = new DatagramPacket(receiveData,
                         receiveData.length);
@@ -75,11 +85,15 @@ public class ServerDistribution {
                 fragmentedPackage[i] = receivedFromClient.getData();
             }
 
+            //desfragmenta, ordena os pacotes recebidos e os converte novamente para
+            //um pseudoPackage
             String receivedObject = packageShredder.defragment(fragmentedPackage);
             reader = new JsonReader(new StringReader(receivedObject));
             reader.setLenient(true);
             PseudoPackage returnPackage = gson.fromJson(reader, PseudoPackage.class);
             reader.close();
+            
+            //cria uma Thread para tratar a requisicao do cliente
             ServiceAdapterThread adapter = new ServiceAdapterThread(IPAddress, clientPort, returnPackage);
             adapter.evaluateRequest();
             Thread adapterThread = new Thread(adapter);
@@ -87,6 +101,8 @@ public class ServerDistribution {
             return;
 
         } else {
+            //caso o tipo da requisicao recebida nao seja o numero de pacotes,
+            //envia ao cliente uma confirmacao de erro
             PseudoPackage confirmationPackage;
             List<String> jsonContent;
             jsonContent = new ArrayList();
@@ -109,8 +125,10 @@ public class ServerDistribution {
         PackageShredder packageShredder = new PackageShredder();
         Gson gson = new Gson();
 
+        //fragmenta o pseudoPackage contendo a resposta em uma matriz de byte
         sendData = packageShredder.fragment(gson.toJson(responsePackage));
 
+        //envia a resposta ao cliente
         if (sendData.length > 1) {
             for (byte[] sendDataAux : sendData) {
                 DatagramPacket sendPacketConfirmation = new DatagramPacket(sendDataAux,
