@@ -4,8 +4,10 @@ import br.cefetmg.inf.organizer.dist.ServerDistribution;
 import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
+import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
 import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
+import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
 import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
 import br.cefetmg.inf.util.PackageShredder;
 import br.cefetmg.inf.util.PseudoPackage;
@@ -78,6 +80,7 @@ public class ServiceAdapterThread  implements Runnable{
         IKeepUser keepUser;
         Item item;
         IKeepItem keepItem;
+        IKeepItemTag keepItemTag;
         
         switch (requestType) {
             case REGISTERUSER:
@@ -131,6 +134,34 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;
+            
+            case DELETEITEM:
+                
+                Long idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                user = gson.fromJson(contentPackage.getContent().get(1), User.class);
+                keepItem = new KeepItem();
+                confirm = keepItem.deleteItem(idItem, user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;
+            
+            case DELETETAGBYITEMID:
+                
+                idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                keepItemTag = new KeepItemTag();
+                confirm = keepItemTag.deleteTagByItemId(idItem);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;
+                
             default:
             //exception
         }

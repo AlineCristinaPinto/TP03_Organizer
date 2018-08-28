@@ -139,7 +139,7 @@
                         </form>
                         <hr>
                         <form id="deleteItem" method="post">
-                            <input type="hidden" id="takeId" name="takeId">
+                            <input type="text" id="takeId" name="takeId">
                             <a href="#" class="opItemModal delItem">                        
                                 <span class="fa fa-trash-o"></span> Excluir
                             </a>
