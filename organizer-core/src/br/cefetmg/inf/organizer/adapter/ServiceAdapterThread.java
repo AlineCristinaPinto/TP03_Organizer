@@ -212,7 +212,7 @@ public class ServiceAdapterThread  implements Runnable{
                 Item itemById = keepItem.searchItemById(idItem);
                 
                 jsonContent = new ArrayList();
-                jsonContent.add(gson.toJson(itemById));
+                jsonContent.add(gson.toJson(itemById, Item.class));
                 responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
                         
                 prepareToSend(responsePackage);                    

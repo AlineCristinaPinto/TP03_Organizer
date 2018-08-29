@@ -149,13 +149,16 @@ public class KeepItemProxy implements IKeepItem {
         
         contentPackage = new PseudoPackage(requestType, jsonContent);
         
+        Item item;
+        
         try {
             PseudoPackage receivedPackage = client.request(contentPackage);
             
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
-            
-            return json.fromJson(receivedPackage.getContent().get(0), Item.class);
+            // chamar DateDeserializer para data no receivedPackage
+            item = json.fromJson(reader, Item.class);
+            return item;
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
