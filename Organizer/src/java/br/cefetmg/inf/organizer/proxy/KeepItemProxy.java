@@ -54,7 +54,26 @@ public class KeepItemProxy implements IKeepItem {
 
     @Override
     public boolean updateItem(Item item) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PseudoPackage contentPackage;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(item));
+        
+        RequestType requestType = RequestType.UPDATEITEM;
+        contentPackage = new PseudoPackage(requestType, jsonContent); 
+        
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            return Boolean.valueOf(receivedPackage.getContent().get(0));
+           
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
     }
 
     @Override
@@ -117,7 +136,32 @@ public class KeepItemProxy implements IKeepItem {
 
     @Override
     public Item searchItemById(Long idItem) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PseudoPackage contentPackage;
+        JsonReader reader;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(idItem));
+        
+        RequestType requestType = RequestType.SEARCHITEMBYID;
+        
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            
+            reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
+            reader.setLenient(true);
+            
+            return json.fromJson(receivedPackage.getContent().get(0), Item.class);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        return null;
     }
 
     @Override

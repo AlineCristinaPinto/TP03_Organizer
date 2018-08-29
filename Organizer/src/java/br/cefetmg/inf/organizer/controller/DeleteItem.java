@@ -23,19 +23,16 @@ public class DeleteItem implements GenericProcess{
         List<Item> itemList;
         
         // Pegando usuário
-        //HttpSession session = req.getSession();
-        //User user = (User) session.getAttribute("user");
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
         
-        User user = new User();
-        user.setCodEmail("aline@gmail.com");
-      
         String idItemString = req.getParameter("takeId");
         Long idItem = Long.parseLong(idItemString); 
        
         IKeepItem keepItem = new KeepItemProxy();
         boolean result = keepItem.deleteItem(idItem, user);
        
-        if(result == false){
+        if(!result){
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Erro ao deletar Item");
@@ -47,7 +44,7 @@ public class DeleteItem implements GenericProcess{
             IKeepItemTag keepItemTag = new KeepItemTagProxy();
             result = keepItemTag.deleteTagByItemId(idItem);
             
-            if(result == false){
+            if(!result){
                 ErrorObject error = new ErrorObject();
                 error.setErrorName("Tente novamente");
                 error.setErrorDescription("Erro ao deletar Tag");

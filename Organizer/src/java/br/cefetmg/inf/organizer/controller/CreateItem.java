@@ -9,6 +9,7 @@ import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
 import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
 import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 //import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
 //import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
 //import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
@@ -32,12 +33,9 @@ public class CreateItem implements GenericProcess{
         List<Item> itemList;
         
         // Pegando usuário
-        //HttpSession session = req.getSession();
-        //User user = (User) session.getAttribute("user");
-        
-        User user = new User();
-        user.setCodEmail("aline@gmail.com");
-                  
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+                 
         // Pega os dados dos inputs
         String selectType = req.getParameter("selectType");
         String name = req.getParameter("nameItem");
@@ -61,9 +59,9 @@ public class CreateItem implements GenericProcess{
         if(!tag.isEmpty()){
             String[] vetTag = tag.split(";");
            
-            // Esperar Proxy do Pedro Lucas
+            // Esperar Proxy do Pedro Lucas para funcionar
             
-            /*IKeepTag keepTag = new KeepTag();
+            IKeepTag keepTag = new KeepTagProxy();
 
             for (String vetTag1 : vetTag) {
                 if (keepTag.searchTagByName(vetTag1.trim(), user) == null) {
@@ -77,7 +75,7 @@ public class CreateItem implements GenericProcess{
 
                     tagItem.add(tagOfUser);
                 }
-            }*/
+            }
         }
         
         // Instanciando item para inserir

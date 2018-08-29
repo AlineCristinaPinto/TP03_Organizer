@@ -7,7 +7,9 @@ import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.util.PseudoPackage;
 import br.cefetmg.inf.util.RequestType;
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -25,17 +27,82 @@ public class KeepItemTagProxy implements IKeepItemTag{
 
     @Override
     public boolean createTagInItem(ItemTag itemTag) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PseudoPackage contentPackage;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(itemTag));
+        
+        RequestType requestType = RequestType.CREATETAGINITEM;        
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            return Boolean.valueOf(receivedPackage.getContent().get(0));
+           
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        return false;
     }
 
     @Override
     public boolean deleteTagInItem(ArrayList<Tag> itemTag, Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
+        
+        PseudoPackage contentPackage;
+        JsonReader reader;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(itemTag));
+        jsonContent.add(json.toJson(id));
+        
+        RequestType requestType = RequestType.DELETETAGINITEM;
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            return Boolean.valueOf(receivedPackage.getContent().get(0));
+           
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
     }
 
     @Override
     public ArrayList<Tag> listAllTagInItem(Long seqItem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PseudoPackage contentPackage;
+        JsonReader reader;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(seqItem));
+        
+        RequestType requestType = RequestType.LISTALLTAGINITEM;
+        
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            
+            reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
+            reader.setLenient(true);
+           
+            return json.fromJson(reader, ArrayList.class);
+             
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        return new ArrayList();
     }
 
     @Override

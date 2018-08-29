@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
-
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -11,9 +6,9 @@ import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +34,7 @@ public class ShowUpdateItem implements GenericProcess{
         long seq_item;
         seq_item = Long.parseLong(id);
         
-        IKeepItemTag keepItemTag = new KeepItemTag();
+        IKeepItemTag keepItemTag = new KeepItemTagProxy();
         ArrayList<Tag> oldTags = keepItemTag.listAllTagInItem(seq_item);
         String listTags = "";
         
@@ -53,7 +48,7 @@ public class ShowUpdateItem implements GenericProcess{
         req.getSession().setAttribute("idItem", seq_item);
         req.getSession().setAttribute("itemTag", listTags);
         
-        IKeepItem keepItem = new KeepItem();
+        IKeepItem keepItem = new KeepItemProxy();
         item = keepItem.searchItemById(seq_item);
         if(item == null){
             req.setAttribute("itemList", null);
@@ -61,7 +56,7 @@ public class ShowUpdateItem implements GenericProcess{
             req.setAttribute("itemList", item);
         }
         
-        IKeepTag keepTag = new KeepTag();
+        IKeepTag keepTag = new KeepTagProxy();
         tagList = keepTag.listAlltag(user);
         if (tagList == null) {
             req.setAttribute("tagList", new ArrayList());
@@ -86,4 +81,3 @@ public class ShowUpdateItem implements GenericProcess{
         return pageJSP;    
     }    
 }
-*/

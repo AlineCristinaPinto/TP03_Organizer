@@ -2,7 +2,9 @@ package br.cefetmg.inf.organizer.adapter;
 
 import br.cefetmg.inf.organizer.dist.ServerDistribution;
 import br.cefetmg.inf.organizer.model.domain.Item;
+import br.cefetmg.inf.organizer.model.domain.ItemTag;
 import br.cefetmg.inf.organizer.model.domain.MaxDataObject;
+import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
@@ -90,6 +92,7 @@ public class ServiceAdapterThread  implements Runnable{
         IKeepMaxData keepMaxData;
         
         switch (requestType) {
+            // Cases about User
             case REGISTERUSER:
                 user = gson.fromJson(contentPackage.getContent().get(0), User.class);
                 keepUser = new KeepUser();
@@ -147,7 +150,8 @@ public class ServiceAdapterThread  implements Runnable{
                
                 prepareToSend(responsePackage);    
                 break;
-                
+            
+            // Cases about Item
             case CREATEITEM:
                 
                 item = gson.fromJson(contentPackage.getContent().get(0), Item.class);
@@ -160,17 +164,31 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;
+            
+            case UPDATEITEM:
                 
-            case SEARCHITEMBYNAME:
-                
-                String nameItem = gson.fromJson(contentPackage.getContent().get(0), String.class);
+                item = gson.fromJson(contentPackage.getContent().get(0), Item.class);
                 keepItem = new KeepItem();
-                Item itemByName = keepItem.searchItemByName(nameItem); 
+                confirm = keepItem.updateItem(item);
                 
                 jsonContent = new ArrayList();
-                jsonContent.add(gson.toJson(itemByName));
+                jsonContent.add(String.valueOf(confirm));
                 responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
-                        
+                
+                prepareToSend(responsePackage);                    
+                break;
+            
+            case DELETEITEM:
+                
+                Long idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                user = gson.fromJson(contentPackage.getContent().get(1), User.class);
+                keepItem = new KeepItem();
+                confirm = keepItem.deleteItem(idItem, user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
                 prepareToSend(responsePackage);                    
                 break;
                 
@@ -186,7 +204,88 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;  
+            
+            case SEARCHITEMBYID:  
                 
+                idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                keepItem = new KeepItem();
+                Item itemById = keepItem.searchItemById(idItem);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(itemById));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                        
+                prepareToSend(responsePackage);                    
+                break;
+                
+            case SEARCHITEMBYNAME:
+                
+                String nameItem = gson.fromJson(contentPackage.getContent().get(0), String.class);
+                keepItem = new KeepItem();
+                Item itemByName = keepItem.searchItemByName(nameItem); 
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(itemByName));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                        
+                prepareToSend(responsePackage);                    
+                break;
+            
+            // Cases about ItemTag
+            case CREATETAGINITEM:
+                
+                ItemTag itemTag = gson.fromJson(contentPackage.getContent().get(0), ItemTag.class);
+                keepItemTag = new KeepItemTag();
+                confirm = keepItemTag.createTagInItem(itemTag);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                        
+                prepareToSend(responsePackage);                    
+                break;
+                
+            case DELETETAGINITEM:
+                
+                ArrayList<Tag> arrTagOfItem = gson.fromJson(contentPackage.getContent().get(0), ArrayList.class);
+                Long id = gson.fromJson(contentPackage.getContent().get(1), Long.class);
+                keepItemTag = new KeepItemTag();
+                confirm = keepItemTag.deleteTagInItem(arrTagOfItem, id);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                        
+                prepareToSend(responsePackage);                    
+                break;
+            
+            case LISTALLTAGINITEM:
+                
+                Long seqItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                keepItemTag = new KeepItemTag();
+                ArrayList<Tag> listAllTagsOfItem = keepItemTag.listAllTagInItem(seqItem);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(listAllTagsOfItem));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                        
+                prepareToSend(responsePackage);                    
+                break;
+              
+            case DELETETAGBYITEMID:
+                
+                idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                keepItemTag = new KeepItemTag();
+                confirm = keepItemTag.deleteTagByItemId(idItem);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(String.valueOf(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+                
+                prepareToSend(responsePackage);                    
+                break;
+            
+            // Cases about Max
             case LOADITEMS:
                 
                 user = gson.fromJson(contentPackage.getContent().get(0), User.class);
@@ -235,33 +334,6 @@ public class ServiceAdapterThread  implements Runnable{
                 prepareToSend(responsePackage);                    
                 break;
 
-            case DELETEITEM:
-                
-                Long idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
-                user = gson.fromJson(contentPackage.getContent().get(1), User.class);
-                keepItem = new KeepItem();
-                confirm = keepItem.deleteItem(idItem, user);
-                
-                jsonContent = new ArrayList();
-                jsonContent.add(String.valueOf(confirm));
-                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
-                
-                prepareToSend(responsePackage);                    
-                break;
-            
-            case DELETETAGBYITEMID:
-                
-                idItem = gson.fromJson(contentPackage.getContent().get(0), Long.class);
-                keepItemTag = new KeepItemTag();
-                confirm = keepItemTag.deleteTagByItemId(idItem);
-                
-                jsonContent = new ArrayList();
-                jsonContent.add(String.valueOf(confirm));
-                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
-                
-                prepareToSend(responsePackage);                    
-                break;
-    
             case UPDATEALLITEMS:
                 
                 maxDataObject = gson.fromJson(contentPackage.getContent().get(0), MaxDataObject.class);

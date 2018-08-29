@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
-
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -12,9 +7,9 @@ import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +34,7 @@ public class ConcludeTarefa implements GenericProcess {
         String idItemString = req.getParameter("takeId");
         Long idItem = Long.parseLong(idItemString); 
         
-        IKeepItem keepItem = new KeepItem();        
+        IKeepItem keepItem = new KeepItemProxy();        
         Item item = keepItem.searchItemById(idItem);
         
         item.setIdentifierStatus("C");
@@ -47,7 +42,7 @@ public class ConcludeTarefa implements GenericProcess {
         
         boolean result = keepItem.updateItem(item);
         
-        if(result == false){
+        if(!result){
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Erro ao concluir tarefa");
@@ -55,20 +50,20 @@ public class ConcludeTarefa implements GenericProcess {
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
-            IKeepTag keepTag = new KeepTag();
+            IKeepTag keepTag = new KeepTagProxy();
             Long idConclude = keepTag.searchTagByName("Concluidos", user);
             Tag concludeTag = keepTag.searchTagById(idConclude);
             ArrayList<Tag> tag = new ArrayList();
             tag.add(concludeTag);
            
-            IKeepItemTag keepItemTag = new KeepItemTag();
+            IKeepItemTag keepItemTag = new KeepItemTagProxy();
             ItemTag itemTag = new ItemTag(); 
             itemTag.setItem(item);
             itemTag.setListTags(tag);
             
             result = keepItemTag.createTagInItem(itemTag);
             
-            if(result==false){
+            if(!result){
                 ErrorObject error = new ErrorObject();
                 error.setErrorName("Tente novamente");
                 error.setErrorDescription("Erro ao concluir tarefa");
@@ -90,4 +85,3 @@ public class ConcludeTarefa implements GenericProcess {
     }
     
 }
-*/

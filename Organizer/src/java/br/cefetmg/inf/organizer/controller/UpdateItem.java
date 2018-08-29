@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
-
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -12,9 +7,9 @@ import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,7 +58,7 @@ public class UpdateItem implements GenericProcess{
         if(!tag.isEmpty()){
             String[] vetTag = tag.split(";");
             
-            IKeepTag keepTag = new KeepTag();
+            IKeepTag keepTag = new KeepTagProxy();
 
             for (String vetTag1 : vetTag) {
                 if(vetTag1.equals(" ")){
@@ -89,7 +84,7 @@ public class UpdateItem implements GenericProcess{
             }
         }
         
-        IKeepItemTag keepItemTag = new KeepItemTag();
+        IKeepItemTag keepItemTag = new KeepItemTagProxy();
         ArrayList<Tag> oldTags;
         
         // Pega as tags adicionadas anteriormente a atualização
@@ -161,10 +156,10 @@ public class UpdateItem implements GenericProcess{
         }
         item.setUser(user);
         
-        IKeepItem keepItem = new KeepItem();
+        IKeepItem keepItem = new KeepItemProxy();
         boolean result = keepItem.updateItem(item);
         
-        if(result == false){
+        if(!result){
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Item já existe");
@@ -176,7 +171,7 @@ public class UpdateItem implements GenericProcess{
             if(!deleteTag.isEmpty()){
                 result = keepItemTag.deleteTagInItem(deleteTag, idItem);
                 
-                if(result == false){
+                if(!result){
                     ErrorObject error = new ErrorObject();
                     error.setErrorName("Tente novamente");
                     error.setErrorDescription("Erro Interno 505");
@@ -193,7 +188,7 @@ public class UpdateItem implements GenericProcess{
 
                         result = keepItemTag.createTagInItem(itemTag);
 
-                        if(result == false){
+                        if(!result){
                             ErrorObject error = new ErrorObject();
                             error.setErrorName("Tente novamente");
                             error.setErrorDescription("Erro interno 505");
@@ -228,7 +223,7 @@ public class UpdateItem implements GenericProcess{
 
                     result = keepItemTag.createTagInItem(itemTag);
 
-                    if(result == false){
+                    if(!result){
                         ErrorObject error = new ErrorObject();
                         error.setErrorName("Tente novamente");
                         error.setErrorDescription("Erro interno 505");
@@ -261,4 +256,4 @@ public class UpdateItem implements GenericProcess{
     }
     
 }
-*/
+
