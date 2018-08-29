@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
-<%@page import="br.cefetmg.inf.organizer.model.service.impl.KeepTag"%>
 <%@page import="br.cefetmg.inf.organizer.model.domain.User"%>
 <%@page import="br.cefetmg.inf.util.ErrorObject" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
