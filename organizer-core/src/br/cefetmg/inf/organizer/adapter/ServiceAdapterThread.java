@@ -20,7 +20,9 @@ import br.cefetmg.inf.util.RequestType;
 import br.cefetmg.inf.util.exception.BusinessException;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +90,13 @@ public class ServiceAdapterThread  implements Runnable{
         IKeepUser keepUser;
         Item item;
         IKeepItem keepItem;
+        ArrayList<Item> itemList;
+        List<Tag> tagList;
+        List<String> typeList;
         IKeepItemTag keepItemTag;
         IKeepMaxData keepMaxData;
+        
+        Type type;
         
         switch (requestType) {
             // Cases about User
@@ -196,7 +203,7 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 user = gson.fromJson(contentPackage.getContent().get(0), User.class);
                 keepItem = new KeepItem();
-                List<Item> itemList  = keepItem.listAllItem(user);
+                itemList  = keepItem.listAllItem(user);
                 
                 jsonContent = new ArrayList();
                 jsonContent.add(gson.toJson(itemList));
@@ -230,7 +237,60 @@ public class ServiceAdapterThread  implements Runnable{
                         
                 prepareToSend(responsePackage);                    
                 break;
+                
+            case SEARCHITEMBYTAG:
+                
+                type = new TypeToken<ArrayList<Tag>>(){}.getType();
+                
+                tagList = gson.fromJson(contentPackage.getContent().get(0), type);
+                user = gson.fromJson(contentPackage.getContent().get(1), User.class);
+                
+                keepItem = new KeepItem();
+                
+                itemList = keepItem.searchItemByTag(tagList, user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(itemList));
+                responsePackage = new PseudoPackage(RequestType.SEARCHITEMBYTAG, jsonContent);
+                
+                prepareToSend(responsePackage);
+                break;
+                
+            case SEARCHITEMBYTYPE:
+                
+                typeList = gson.fromJson(contentPackage.getContent().get(0), List.class);
+                user = gson.fromJson(contentPackage.getContent().get(1), User.class);
+                
+                keepItem = new KeepItem();
+                
+                itemList  = keepItem.searchItemByType(typeList, user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(itemList));
+                responsePackage = new PseudoPackage(RequestType.SEARCHITEMBYTYPE, jsonContent);
+                
+                prepareToSend(responsePackage);
+                break;
+                
+            case SEARCHITEMBYTAGANDTYPE:
+                
+                type = new TypeToken<ArrayList<Tag>>(){}.getType();
             
+                tagList = gson.fromJson(contentPackage.getContent().get(0), type);
+                typeList = gson.fromJson(contentPackage.getContent().get(1), List.class);
+                user = gson.fromJson(contentPackage.getContent().get(2), User.class);
+                
+                keepItem = new KeepItem();
+                
+                itemList  = keepItem.searchItemByTagAndType(tagList, typeList, user);
+                
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(itemList));
+                responsePackage = new PseudoPackage(RequestType.SEARCHITEMBYTAGANDTYPE, jsonContent);
+                
+                prepareToSend(responsePackage);
+                break;
+                
             // Cases about ItemTag
             case CREATETAGINITEM:
                 
