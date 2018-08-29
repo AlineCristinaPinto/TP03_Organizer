@@ -8,10 +8,6 @@
 Expression Languages também não funcionam quando chamo o método estático abaixo
 --%>
 
-<c:if test="<%=UserValidation.validate((User)session.getAttribute("user"))%>"> 
-    <jsp:forward page="index.jsp"></jsp:forward>
-</c:if>
-
 <html class="body-full-height">
     <head>
         <title>Organizer</title>
@@ -31,21 +27,21 @@ Expression Languages também não funcionam quando chamo o método estático aba
                 <div class="login-body">
                     <div class="login-title"><strong>Bem Vindo(a) ao Organizer!</strong></div>
                     <form id="formLogin" action="/organizer/servletcontroller?process=UserLogin" class="form-horizontal" method="post">
-                     <div class="form-group">
-                        <div class="col-md-12">
-                            <input name="email" type="text" class="form-control" placeholder="Email" required/>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input name="email" type="text" class="form-control" placeholder="Email" required/>
+                            </div>
                         </div>
-                     </div>
-                     <div class="form-group">
-                        <div class="col-md-12">
-                            <input name="password" type="password" class="form-control" placeholder="Senha" required/>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input name="password" type="password" class="form-control" placeholder="Senha" required/>
+                            </div>
                         </div>
-                     </div>
-                     <div class="form-group">
-                        <div class="col-md-6">
-                            <button class="btn btn-info btn-block">Logar</button>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <button class="btn btn-info btn-block">Logar</button>
+                            </div>
                         </div>
-                     </div>
                     </form>
                     <div class="login-subtitle">
                         Não possui uma conta ainda? <a href="cadastrar.jsp">Crie uma conta</a>
@@ -54,6 +50,15 @@ Expression Languages também não funcionam quando chamo o método estático aba
             </div>
 
         </div>
+        <form id="redirectToIndex" method="post">
+        </form>
 
+        <c:if test="<%=UserValidation.validate((User) session.getAttribute("user"))%>"> 
+            <script>
+                let formRedirect = document.querySelector("#redirectToIndex");
+                formRedirect.action = "/organizer/servletcontroller?process=LoadItem";
+                formRedirect.submit();
+            </script>
+        </c:if>
     </body>
 </html>
