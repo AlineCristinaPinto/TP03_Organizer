@@ -1,4 +1,3 @@
-/*
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -6,8 +5,8 @@ import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class UpdateTag implements GenericProcess {
         String oldNameTag = req.getParameter("takeOldName");
         String nameTag = req.getParameter("nameEdited");
 
-        IKeepTag keepTag = new KeepTag();
+        IKeepTag keepTag = new KeepTagProxy();
 
         Tag tag = new Tag();
         tag.setSeqTag(keepTag.searchTagByName(oldNameTag, user));
@@ -44,18 +43,24 @@ public class UpdateTag implements GenericProcess {
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
-            IKeepItem keepItem = new KeepItem();
+            IKeepItem keepItem = new KeepItemProxy();
             itemList = keepItem.listAllItem(user);
-            if(itemList == null){
+            if (itemList == null) {
                 req.setAttribute("itemList", new ArrayList());
-            }else{
+            } else {
                 req.setAttribute("itemList", itemList);
             }
+
+            List<Tag> tagList = keepTag.listAlltag(user);
+            if (tagList == null) {
+                req.setAttribute("tagList", new ArrayList());
+            } else {
+                req.setAttribute("tagList", tagList);
+            }
+
             pageJSP = "/index.jsp";
         }
 
         return pageJSP;
     }
-
 }
-*/

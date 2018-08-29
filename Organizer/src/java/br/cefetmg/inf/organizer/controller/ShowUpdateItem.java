@@ -56,13 +56,13 @@ public class ShowUpdateItem implements GenericProcess{
             req.setAttribute("itemList", item);
         }
         
-       /* IKeepTag keepTag = new KeepTagProxy();
+        IKeepTag keepTag = new KeepTagProxy();
         tagList = keepTag.listAlltag(user);
         if (tagList == null) {
             req.setAttribute("tagList", new ArrayList());
         } else {
             req.setAttribute("tagList", tagList);
-        }*/
+        }
         
         switch (typeItem) {
             case "SIM":

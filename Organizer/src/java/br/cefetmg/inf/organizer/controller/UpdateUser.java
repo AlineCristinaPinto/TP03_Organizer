@@ -1,11 +1,16 @@
 
 package br.cefetmg.inf.organizer.controller;
 
+import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
+import br.cefetmg.inf.organizer.model.service.IKeepTag;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.organizer.proxy.KeepUserProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.PasswordCriptography;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,6 +52,15 @@ public class UpdateUser implements GenericProcess {
             pageJSP = "/error.jsp";
         } else {
             req.getSession().setAttribute("user",tempUser);
+            
+            IKeepTag keepTag = new KeepTagProxy();
+            List<Tag> tagList = keepTag.listAlltag(user);
+            if (tagList == null) {
+                req.setAttribute("tagList", new ArrayList());
+            } else {
+                req.setAttribute("tagList", tagList);
+            }
+            
             pageJSP = "/configuracoes.jsp";
         }
         

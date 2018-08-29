@@ -10,9 +10,11 @@ import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
 import br.cefetmg.inf.organizer.model.service.IKeepMaxData;
+import br.cefetmg.inf.organizer.model.service.IKeepTag;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
 import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
 import br.cefetmg.inf.organizer.model.service.impl.KeepMaxData;
+import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
 import br.cefetmg.inf.organizer.model.service.impl.KeepUser;
 import br.cefetmg.inf.util.PackageShredder;
 import br.cefetmg.inf.util.PseudoPackage;
@@ -96,6 +98,8 @@ public class ServiceAdapterThread  implements Runnable{
         List<String> typeList;
         IKeepItemTag keepItemTag;
         IKeepMaxData keepMaxData;
+        IKeepTag keepTag;
+        Tag tag;
         
         Type type;
         
@@ -430,6 +434,113 @@ public class ServiceAdapterThread  implements Runnable{
                 
                 prepareToSend(responsePackage);                    
                 break;   
+            
+            // Cases about Tag
+            case CREATETAG:
+
+                tag = gson.fromJson(contentPackage.getContent().get(0), Tag.class);
+                keepTag = new KeepTag();
+                confirm = keepTag.createTag(tag);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case READTAG:
+
+                tag = gson.fromJson(contentPackage.getContent().get(0), Tag.class);
+                keepTag = new KeepTag();
+                Tag readTag = keepTag.readTag(tag);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(readTag));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case UPDATETAG:
+
+                tag = gson.fromJson(contentPackage.getContent().get(0), Tag.class);
+                keepTag = new KeepTag();
+                confirm = keepTag.updateTag(tag);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case UPDATETAGID:
+
+                tag = gson.fromJson(contentPackage.getContent().get(0), Tag.class);
+                Long idTag = gson.fromJson(contentPackage.getContent().get(1), Long.class);
+                keepTag = new KeepTag();
+                confirm = keepTag.updateTagId(tag, idTag);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case DELETETAG:
+
+                tag = gson.fromJson(contentPackage.getContent().get(0), Tag.class);
+                keepTag = new KeepTag();
+                confirm = keepTag.deleteTag(tag);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(confirm));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case LISTALLTAG:
+
+                user = gson.fromJson(contentPackage.getContent().get(0), User.class);
+                keepTag = new KeepTag();
+                List<Tag> listTag = keepTag.listAlltag(user);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(listTag));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case SEARCHTAGBYNAME:
+
+                String tagName = gson.fromJson(contentPackage.getContent().get(0), String.class);
+                user = gson.fromJson(contentPackage.getContent().get(1), User.class);
+                keepTag = new KeepTag();
+                idTag = keepTag.searchTagByName(tagName, user);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(idTag));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;
+
+            case SEARCHTAGBYID:
+
+                idTag = gson.fromJson(contentPackage.getContent().get(0), Long.class);
+                keepTag = new KeepTag();
+                tag = keepTag.searchTagById(idTag);
+
+                jsonContent = new ArrayList();
+                jsonContent.add(gson.toJson(tag));
+                responsePackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+
+                prepareToSend(responsePackage);
+                break;    
                 
             default:
             //exception

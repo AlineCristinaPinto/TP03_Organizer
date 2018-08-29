@@ -1,4 +1,4 @@
-/*
+
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -6,11 +6,9 @@ import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
-import br.cefetmg.inf.util.exception.BusinessException;
-import br.cefetmg.inf.util.exception.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +18,13 @@ import javax.servlet.http.HttpSession;
 public class CreateTag implements GenericProcess {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse res) throws PersistenceException, BusinessException {
+    public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
         String pageJSP = "";
         List<Item> itemList;
 
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
+        
         String nameTag = req.getParameter("name");
 
         Tag tag = new Tag();
@@ -33,7 +32,7 @@ public class CreateTag implements GenericProcess {
         tag.setUser(user);
         tag.setSeqTag(null);
 
-        IKeepTag keepTag = new KeepTag();
+        IKeepTag keepTag = new KeepTagProxy();
         boolean success = keepTag.createTag(tag);
 
         if (!success) {
@@ -44,17 +43,24 @@ public class CreateTag implements GenericProcess {
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
-            IKeepItem keepItem = new KeepItem();
+            IKeepItem keepItem = new KeepItemProxy();
             itemList = keepItem.listAllItem(user);
             if(itemList == null){
                 req.setAttribute("itemList", new ArrayList());
             }else{
                 req.setAttribute("itemList", itemList);
             }
+            
+            List<Tag> tagList = keepTag.listAlltag(user);
+            if(tagList == null){
+                req.setAttribute("tagList", new ArrayList());
+            }else{
+                req.setAttribute("tagList", tagList);
+            }
+            
             pageJSP = "/index.jsp";
         }
 
         return pageJSP;
     }
 }
-*/

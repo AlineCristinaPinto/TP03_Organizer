@@ -20,41 +20,40 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-public class UpdateItem implements GenericProcess{
+public class UpdateItem implements GenericProcess {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        
+
         String pageJSP = "";
         List<Item> itemList;
-        
+
         // Pegando usuário
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-        
+
         // Pega os dados dos inputs
         String id = req.getParameter("getIdItem");
         Long idItem = Long.parseLong(id);
         String name = req.getParameter("nameItem");
         String description = req.getParameter("descriptionItem");
         String identifierItem = req.getParameter("getIdentifierItem");
-        
+
         // Tratamento de data
         String datItem = req.getParameter("dateItem");
         Date dateItem;
-        if(datItem == null || datItem.equals("") || datItem.isEmpty()){
+        if (datItem == null || datItem.equals("") || datItem.isEmpty()) {
             dateItem = null;
         } else {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             dateItem = formatter.parse(datItem);
         }
-        
+
         // Tratamento de Tag
         String tag = req.getParameter("inputTag");
-        
+
         ArrayList<Tag> tagItem = new ArrayList();
-            
+
         /*if(!tag.isEmpty()){
             String[] vetTag = tag.split(";");
             
@@ -142,24 +141,23 @@ public class UpdateItem implements GenericProcess{
             }
         
         }*/
-                     
         // Instanciando item para update
         Item item = new Item();
-        
+
         item.setSeqItem(idItem);
         item.setNameItem(name);
         item.setDescriptionItem(description);
         item.setDateItem(dateItem);
         item.setIdentifierItem(identifierItem);
-        if(identifierItem.equals("TAR")){
+        if (identifierItem.equals("TAR")) {
             item.setIdentifierStatus("A");
         }
         item.setUser(user);
-        
+
         IKeepItem keepItem = new KeepItemProxy();
         boolean result = keepItem.updateItem(item);
-        
-        if(!result){
+
+        if (!result) {
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Item já existe");
@@ -167,7 +165,7 @@ public class UpdateItem implements GenericProcess{
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
-            
+
             /*if(!deleteTag.isEmpty()){
                 result = keepItemTag.deleteTagInItem(deleteTag, idItem);
                 
@@ -240,20 +238,28 @@ public class UpdateItem implements GenericProcess{
                         pageJSP = "/index.jsp";
                     }
                 } else {*/
-                    itemList = keepItem.listAllItem(user);
-                    if(itemList == null){
-                        req.setAttribute("itemList", new ArrayList());
-                    }else{
-                        req.setAttribute("itemList", itemList);
-                    }
-                    pageJSP = "/index.jsp";
-               // }
-           // }             
-            
+            itemList = keepItem.listAllItem(user);
+            if (itemList == null) {
+                req.setAttribute("itemList", new ArrayList());
+            } else {
+                req.setAttribute("itemList", itemList);
+            }
+
+            IKeepTag keepTag = new KeepTagProxy();
+            List<Tag> tagList = keepTag.listAlltag(user);
+            if (tagList == null) {
+                req.setAttribute("tagList", new ArrayList());
+            } else {
+                req.setAttribute("tagList", tagList);
+            }
+
+            pageJSP = "/index.jsp";
+            // }
+            // }             
+
         }
-        
+
         return pageJSP;
     }
-    
-}
 
+}

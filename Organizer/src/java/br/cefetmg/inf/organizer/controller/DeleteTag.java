@@ -1,4 +1,3 @@
-/*
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
@@ -6,8 +5,8 @@ import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
 import br.cefetmg.inf.organizer.model.service.IKeepTag;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class DeleteTag implements GenericProcess {
         User user = (User) session.getAttribute("user");
         String nameTag = req.getParameter("tagMenu");
 
-        IKeepTag keepTag = new KeepTag();
+        IKeepTag keepTag = new KeepTagProxy();
 
         Tag tag = new Tag();
         tag.setSeqTag(keepTag.searchTagByName(nameTag, user));
@@ -34,17 +33,16 @@ public class DeleteTag implements GenericProcess {
         tag.setUser(user);
 
         boolean success = keepTag.deleteTag(tag);
-        // ?? 
+         
         if (!success) { 
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Erro ao deletar a tag");
-            //error.setErrorSubtext("Verifique se o usuário já existe ou se ocorreu um erro no preenchimento dos campos");
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
             
-            IKeepItem keepItem = new KeepItem();
+            IKeepItem keepItem = new KeepItemProxy();
             itemList = keepItem.listAllItem(user);
             if(itemList == null){
                 req.setAttribute("itemList", new ArrayList());
@@ -58,4 +56,3 @@ public class DeleteTag implements GenericProcess {
         return pageJSP;
     }
 }
-*/

@@ -102,8 +102,8 @@
 
         <li class="xn-openable">
             <a href="#"><span class="fa fa-tag"></span> <span class="xn-text">Tags</span></a>
-            <%               // listTag = keepTag.listAlltag(userSessao);
-
+            <% 
+                listTag = (ArrayList) request.getAttribute("tagList");
                 String[] usedTags = request.getParameterValues("tag");
 
                 pageContext.setAttribute("listTagUser", listTag);

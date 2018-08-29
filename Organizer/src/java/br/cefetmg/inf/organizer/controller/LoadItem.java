@@ -1,9 +1,13 @@
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
+import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
+import br.cefetmg.inf.organizer.model.service.IKeepTag;
 import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +32,14 @@ public class LoadItem implements GenericProcess{
             req.setAttribute("itemList", null);
         }else{
             req.setAttribute("itemList", itemList);
+        }
+        
+        IKeepTag keepTag = new KeepTagProxy();
+        List<Tag> tagList = keepTag.listAlltag(user);
+        if (tagList == null) {
+            req.setAttribute("tagList", new ArrayList());
+        } else {
+            req.setAttribute("tagList", tagList);
         }
         
         pageJSP = "/index.jsp";
