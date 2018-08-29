@@ -1,15 +1,14 @@
-/*
+
 package br.cefetmg.inf.organizer.controller;
 
 import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
-import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
+import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,7 +20,7 @@ public class ItemFilter implements GenericProcess {
         String pageJSP = "/index.jsp";
         ArrayList<Tag> tagList = new ArrayList<>();
         ArrayList<String> typeList = new ArrayList<>();
-        List<Item> itemList;
+        ArrayList<Item> itemList;
         String[] tags;
         String[] types;
         
@@ -58,7 +57,7 @@ public class ItemFilter implements GenericProcess {
             }
         }
         
-        IKeepItem keepItem = new KeepItem();
+        IKeepItem keepItem = new KeepItemProxy();
         
         try{
             if(tagFiltering && typeFiltering){
@@ -95,7 +94,7 @@ public class ItemFilter implements GenericProcess {
             }
 
             if(!concluidoExists && (itemList != null)){
-                for(Item item : new ArrayList<>(itemList)){
+                for(Item item : new ArrayList<Item>(itemList)){
                     if(item.getIdentifierItem().equals("TAR") && 
                         item.getIdentifierStatus().equals("C")){
                         itemList.remove(item);
@@ -123,4 +122,3 @@ public class ItemFilter implements GenericProcess {
     }
     
 }
-*/

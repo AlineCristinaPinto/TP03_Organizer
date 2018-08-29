@@ -193,18 +193,108 @@ public class KeepItemProxy implements IKeepItem {
     }
 
     @Override
-    public List<Item> searchItemByTag(List<Tag> tagList, User user) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Item> searchItemByTag(List<Tag> tagList, User user) throws PersistenceException {
+        PseudoPackage contentPackage;
+        Gson json = new Gson();
+        
+        ArrayList<String> jsonContent;
+        JsonReader reader;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(tagList));
+        jsonContent.add(json.toJson(user));
+        
+        ArrayList<Item> itemList;
+        
+        RequestType requestType = RequestType.SEARCHITEMBYTAG;
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            
+            reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
+            reader.setLenient(true);
+            
+            Type type = new TypeToken<ArrayList<Item>>(){}.getType();
+            
+            itemList = json.fromJson(reader, type);
+            
+            return itemList;
+            
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
     @Override
-    public List<Item> searchItemByType(List<String> typeList, User user) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Item> searchItemByType(List<String> typeList, User user) throws PersistenceException {
+        
+        PseudoPackage contentPackage;
+        JsonReader reader;
+        Gson json = new Gson();
+        
+        List<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(typeList));
+        jsonContent.add(json.toJson(user));
+        
+        ArrayList<Item> itemList;
+        
+        RequestType requestType = RequestType.SEARCHITEMBYTYPE;
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            
+            reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
+            reader.setLenient(true);
+            
+            Type type = new TypeToken<ArrayList<Item>>(){}.getType();
+            
+            itemList = json.fromJson(reader, type);
+            
+            return itemList;
+            
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return null;
     }
 
     @Override
-    public List<Item> searchItemByTagAndType(List<Tag> tagList, List<String> typeList, User user) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Item> searchItemByTagAndType(List<Tag> tagList, List<String> typeList, User user) throws PersistenceException {
+        PseudoPackage contentPackage;
+        JsonReader reader;
+        Gson json = new Gson();
+        
+        ArrayList<String> jsonContent;
+        jsonContent = new ArrayList();
+        jsonContent.add(json.toJson(tagList));
+        jsonContent.add(json.toJson(typeList));
+        jsonContent.add(json.toJson(user));
+        
+        ArrayList<Item> itemList;
+        
+        RequestType requestType = RequestType.SEARCHITEMBYTAGANDTYPE;
+        contentPackage = new PseudoPackage(requestType, jsonContent);
+        try {
+            PseudoPackage receivedPackage = client.request(contentPackage);
+            
+            reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
+            reader.setLenient(true);
+            
+            Type type = new TypeToken<ArrayList<Item>>(){}.getType();
+            
+            itemList = json.fromJson(reader, type);
+            
+            return itemList;
+            
+        } catch (IOException ex) {
+            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
     
 }

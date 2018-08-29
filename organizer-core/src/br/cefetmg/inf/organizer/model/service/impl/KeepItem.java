@@ -106,24 +106,24 @@ public class KeepItem implements IKeepItem{
     }
     
     @Override
-    public List<Item> searchItemByTag(List<Tag> tagList, User user) throws PersistenceException{
+    public ArrayList<Item> searchItemByTag(List<Tag> tagList, User user) throws PersistenceException{
         
-        List<Item> result = itemDAO.searchItemByTag(tagList, user);
+        ArrayList<Item> result = itemDAO.searchItemByTag(tagList, user);
         return result;
     }
     
     @Override
-    public List<Item> searchItemByType(List<String> typeList, User user) throws PersistenceException{
+    public ArrayList<Item> searchItemByType(List<String> typeList, User user) throws PersistenceException{
         
-        List<Item> result = itemDAO.searchItemByType(typeList, user);
+        ArrayList<Item> result = itemDAO.searchItemByType(typeList, user);
         return result;
     }
     
     @Override
-    public List<Item> searchItemByTagAndType(List<Tag> tagList, List<String> typeList, User user) 
+    public ArrayList<Item> searchItemByTagAndType(List<Tag> tagList, List<String> typeList, User user) 
             throws PersistenceException{
         
-        List<Item> result = itemDAO.searchItemByTagAndType(tagList, typeList, user);
+        ArrayList<Item> result = itemDAO.searchItemByTagAndType(tagList, typeList, user);
         return result;
     }
 
