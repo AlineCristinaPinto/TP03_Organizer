@@ -2,7 +2,6 @@ $(function() {
   
   $(".btOption").click(function() {
       let idItem = $(this).attr('id');
-      idItem = idItem.substr(0,(idItem.length - 2));
       document.querySelector("#takeId").value=idItem;
       document.querySelector("#takeIdU").value=idItem;
       document.querySelector("#takeTypeU").value=$(this).attr('value');
@@ -38,6 +37,11 @@ $(function() {
 
   $("#indexPage").click(function() {
       let formRegister = document.querySelector("#indexPageForm");
+      formRegister.submit();
+  });
+  
+  $("#indexCreateItem").click(function() {
+      let formRegister = document.querySelector("#createItemPageForm");
       formRegister.submit();
   });
 

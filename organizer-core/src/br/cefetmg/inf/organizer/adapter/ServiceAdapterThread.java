@@ -20,6 +20,7 @@ import br.cefetmg.inf.util.RequestType;
 import br.cefetmg.inf.util.exception.BusinessException;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ServiceAdapterThread  implements Runnable{
         this.IPAddress = IPAddress;
         this.clientPort = clientPort;
         this.contentPackage = contentPackage;
-        gson = new Gson();
+        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
     }
 
     @Override

@@ -9,9 +9,12 @@ import br.cefetmg.inf.util.PseudoPackage;
 import br.cefetmg.inf.util.RequestType;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class KeepItemProxy implements IKeepItem {
     public boolean createItem(Item item) throws PersistenceException {
     
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -56,7 +59,7 @@ public class KeepItemProxy implements IKeepItem {
     public boolean updateItem(Item item) throws PersistenceException {
         
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -80,7 +83,7 @@ public class KeepItemProxy implements IKeepItem {
     public boolean deleteItem(Long idItem, User user) throws PersistenceException {
         
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -106,14 +109,12 @@ public class KeepItemProxy implements IKeepItem {
         
         PseudoPackage contentPackage;
         JsonReader reader;
-        Gson json = new Gson();
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
         jsonContent.add(json.toJson(user));
-        
-        ArrayList<Item> arr;
-        
+       
         RequestType requestType = RequestType.LISTALLITEM;
         contentPackage = new PseudoPackage(requestType, jsonContent);
         
@@ -122,10 +123,10 @@ public class KeepItemProxy implements IKeepItem {
             
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
-           
-            arr = json.fromJson(reader, ArrayList.class);
             
-            return arr;
+            Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+            
+            return json.fromJson(reader, type);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,8 +140,7 @@ public class KeepItemProxy implements IKeepItem {
         
         PseudoPackage contentPackage;
         JsonReader reader;
-        Gson json = new Gson();
-        
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         List<String> jsonContent;
         jsonContent = new ArrayList();
         jsonContent.add(json.toJson(idItem));
@@ -149,16 +149,12 @@ public class KeepItemProxy implements IKeepItem {
         
         contentPackage = new PseudoPackage(requestType, jsonContent);
         
-        Item item;
-        
         try {
             PseudoPackage receivedPackage = client.request(contentPackage);
-            
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
-            // chamar DateDeserializer para data no receivedPackage
-            item = json.fromJson(reader, Item.class);
-            return item;
+            
+            return json.fromJson(reader, Item.class);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,7 +168,7 @@ public class KeepItemProxy implements IKeepItem {
         
         PseudoPackage contentPackage;
         JsonReader reader;
-        Gson json = new Gson();
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -187,7 +183,7 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            return json.fromJson(receivedPackage.getContent().get(0), Item.class);
+            return json.fromJson(reader, Item.class);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);

@@ -21,7 +21,9 @@
             <div class="page-content">
                 <!-- Menu Horizontal -->
                 <%@include file="horizontalMenu.jsp"%>
-
+                
+                <form id="createItemPageForm" action="/organizer/servletcontroller?process=LoadTagsToCreateItem" method="post"></form>
+                
                 <div class="page-title"></div>
 
                 <div class="page-content-wrap">
@@ -35,7 +37,7 @@
 
                                     <ul id="ulItens">
                                         <li>
-                                            <a href="createItem.jsp">Criar Item</a>
+                                            <a id="indexCreateItem">Criar Item</a>
                                         </li>
                                         <%
                                             if (request.getAttribute("itemList") == null) {

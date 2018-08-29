@@ -50,7 +50,7 @@ public class ConcludeTarefa implements GenericProcess {
             req.getSession().setAttribute("error", error);
             pageJSP = "/error.jsp";
         } else {
-            IKeepTag keepTag = new KeepTagProxy();
+           /* IKeepTag keepTag = new KeepTagProxy();
             Long idConclude = keepTag.searchTagByName("Concluidos", user);
             Tag concludeTag = keepTag.searchTagById(idConclude);
             ArrayList<Tag> tag = new ArrayList();
@@ -71,14 +71,14 @@ public class ConcludeTarefa implements GenericProcess {
                 req.getSession().setAttribute("error", error);
                 pageJSP = "/error.jsp";
             } else {
-                itemList = keepItem.listAllItem(user);
+            */    itemList = keepItem.listAllItem(user);
                 if(itemList == null){
                     req.setAttribute("itemList", new ArrayList());
                 }else{
                     req.setAttribute("itemList", itemList);
                 }
                 pageJSP = "/index.jsp";
-            }
+            //}
         }
        
         return pageJSP;
