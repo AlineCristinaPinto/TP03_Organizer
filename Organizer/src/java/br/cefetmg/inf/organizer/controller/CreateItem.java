@@ -10,11 +10,10 @@ import br.cefetmg.inf.organizer.model.service.IKeepTag;
 import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
 import br.cefetmg.inf.organizer.proxy.KeepItemTagProxy;
 import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
-//import br.cefetmg.inf.organizer.model.service.impl.KeepItem;
-//import br.cefetmg.inf.organizer.model.service.impl.KeepItemTag;
-//import br.cefetmg.inf.organizer.model.service.impl.KeepTag;
 import br.cefetmg.inf.util.ErrorObject;
+import com.google.gson.Gson;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +30,7 @@ public class CreateItem implements GenericProcess{
     
         String pageJSP = "";
         List<Item> itemList;
+        Gson json = new Gson();
         
         // Pegando usuário
         HttpSession session = req.getSession();
@@ -152,8 +152,12 @@ public class CreateItem implements GenericProcess{
                 }    
             } else {
                 itemList = keepItem.listAllItem(user);
+                  
                 /*for(Item itemIterator: itemList){
-                    Long value = (Long)itemIterator.getSeqItem();
+                    double asd = (double)itemIterator.getSeqItem(); 
+                    DecimalFormat format = new DecimalFormat("##"); 
+                    asd = Double.parseDouble(format.format(asd));
+                    Long value = (new Double(asd)).longValue();;                            
                     itemIterator.setSeqItem(value);
                 }*/
                 if(itemList == null){
