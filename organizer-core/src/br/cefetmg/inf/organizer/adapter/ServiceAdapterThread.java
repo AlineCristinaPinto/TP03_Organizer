@@ -312,7 +312,8 @@ public class ServiceAdapterThread  implements Runnable{
                 
             case DELETETAGINITEM:
                 
-                ArrayList<Tag> arrTagOfItem = gson.fromJson(contentPackage.getContent().get(0), ArrayList.class);
+                type = new TypeToken<ArrayList<Tag>>() {}.getType();
+                ArrayList<Tag> arrTagOfItem = gson.fromJson(contentPackage.getContent().get(0), type);
                 Long id = gson.fromJson(contentPackage.getContent().get(1), Long.class);
                 keepItemTag = new KeepItemTag();
                 confirm = keepItemTag.deleteTagInItem(arrTagOfItem, id);

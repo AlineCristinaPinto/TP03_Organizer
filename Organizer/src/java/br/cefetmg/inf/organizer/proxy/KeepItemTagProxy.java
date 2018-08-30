@@ -56,7 +56,6 @@ public class KeepItemTagProxy implements IKeepItemTag{
     public boolean deleteTagInItem(ArrayList<Tag> itemTag, Long id) {
         
         PseudoPackage contentPackage;
-        JsonReader reader;
         Gson json = new Gson();
         
         List<String> jsonContent;
