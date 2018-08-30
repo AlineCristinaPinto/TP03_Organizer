@@ -50,6 +50,13 @@ public class DeleteTag implements GenericProcess {
                 req.setAttribute("itemList", itemList);
             }
             
+            List<Tag> tagList = keepTag.listAlltag(user);
+            if(tagList == null){
+                req.setAttribute("tagList", new ArrayList());
+            }else{
+                req.setAttribute("tagList", tagList);
+            }
+            
             pageJSP = "/index.jsp";
         }
 

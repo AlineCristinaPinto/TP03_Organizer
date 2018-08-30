@@ -3,10 +3,13 @@ package br.cefetmg.inf.organizer.controller;
 
 
 import br.cefetmg.inf.organizer.model.domain.Item;
+import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.domain.User;
 import br.cefetmg.inf.organizer.model.service.IKeepItem;
+import br.cefetmg.inf.organizer.model.service.IKeepTag;
 import br.cefetmg.inf.organizer.model.service.IKeepUser;
 import br.cefetmg.inf.organizer.proxy.KeepItemProxy;
+import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.organizer.proxy.KeepUserProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import br.cefetmg.inf.util.PasswordCriptography;
@@ -47,6 +50,13 @@ public class UserLogin implements GenericProcess{
                 req.setAttribute("itemList", new ArrayList());
             }else{
                 req.setAttribute("itemList", itemList);
+            }
+            IKeepTag keepTag = new KeepTagProxy();
+            List<Tag> tagList = keepTag.listAlltag(user);
+            if(tagList == null){
+                req.setAttribute("tagList", new ArrayList());
+            }else{
+                req.setAttribute("tagList", tagList);
             }
                 
             pageJSP = "/index.jsp";
