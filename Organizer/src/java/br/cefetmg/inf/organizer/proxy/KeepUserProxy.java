@@ -140,8 +140,13 @@ public class KeepUserProxy implements IKeepUser {
             JsonReader reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            returnUser = json.fromJson(reader, User.class);
-            return returnUser;
+            if (receivedPackage.getContent().get(0).equals("false")) {
+                return null;
+            } else {
+                returnUser = json.fromJson(reader, User.class);
+                return returnUser;
+            }
+            
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);

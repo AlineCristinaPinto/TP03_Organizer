@@ -124,9 +124,13 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
-            return json.fromJson(reader, type);
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -154,8 +158,12 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            return json.fromJson(reader, Item.class);
-            
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                return json.fromJson(reader, Item.class);
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -183,7 +191,11 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            return json.fromJson(reader, Item.class);
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                return json.fromJson(reader, Item.class);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -203,7 +215,6 @@ public class KeepItemProxy implements IKeepItem {
         jsonContent.add(json.toJson(tagList));
         jsonContent.add(json.toJson(user));
         
-        ArrayList<Item> itemList;
         
         RequestType requestType = RequestType.SEARCHITEMBYTAG;
         contentPackage = new PseudoPackage(requestType, jsonContent);
@@ -213,11 +224,12 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            Type type = new TypeToken<ArrayList<Item>>(){}.getType();
-            
-            itemList = json.fromJson(reader, type);
-            
-            return itemList;
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,7 +250,6 @@ public class KeepItemProxy implements IKeepItem {
         jsonContent.add(json.toJson(typeList));
         jsonContent.add(json.toJson(user));
         
-        ArrayList<Item> itemList;
         
         RequestType requestType = RequestType.SEARCHITEMBYTYPE;
         contentPackage = new PseudoPackage(requestType, jsonContent);
@@ -248,11 +259,12 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            Type type = new TypeToken<ArrayList<Item>>(){}.getType();
-            
-            itemList = json.fromJson(reader, type);
-            
-            return itemList;
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -274,7 +286,6 @@ public class KeepItemProxy implements IKeepItem {
         jsonContent.add(json.toJson(typeList));
         jsonContent.add(json.toJson(user));
         
-        ArrayList<Item> itemList;
         
         RequestType requestType = RequestType.SEARCHITEMBYTAGANDTYPE;
         contentPackage = new PseudoPackage(requestType, jsonContent);
@@ -284,11 +295,12 @@ public class KeepItemProxy implements IKeepItem {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
             
-            Type type = new TypeToken<ArrayList<Item>>(){}.getType();
-            
-            itemList = json.fromJson(reader, type);
-            
-            return itemList;
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);

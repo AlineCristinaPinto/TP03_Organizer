@@ -43,7 +43,7 @@ public class ClientDistribution {
     public PseudoPackage request(PseudoPackage pseudoPackage) throws IOException {
         JsonReader reader;
         final int BYTE_LENGTH = 1024;
- 
+
         byte[][] sendData;
         byte[][] numPackage;
         byte[] receiveData = new byte[BYTE_LENGTH];
@@ -78,17 +78,17 @@ public class ClientDistribution {
                 receiveData.length);
 
         clientSocket.receive(receiveConfirmation);
-        
+
         String receivedPackage = new String(receiveConfirmation.getData());
         reader = new JsonReader(new StringReader(receivedPackage));
         reader.setLenient(true);
         PseudoPackage confirmationPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
-        
+
         //se o numero de pacotes tiver chegado com sucesso
-        if (Boolean.valueOf(confirmationPackage.getContent().get(0)) && 
-                confirmationPackage.getRequestType().equals(RequestType.CONFIRMATIONPACKAGE)) {
-            
+        if (Boolean.valueOf(confirmationPackage.getContent().get(0))
+                && confirmationPackage.getRequestType().equals(RequestType.CONFIRMATIONPACKAGE)) {
+
             //percorre a matriz de bytes e envia os vetores de bytes contendo 
             //os dados ao servidor
             for (byte[] sendData1 : sendData) {
@@ -98,6 +98,13 @@ public class ClientDistribution {
             }
         } else {
             System.out.println("Exceção: o número de pacotes não chegou ao servidor");
+            PseudoPackage returnPackage;
+            RequestType requestError = RequestType.CONFIRMATIONPACKAGE;
+            ArrayList<String> arrayListError = new ArrayList();
+            arrayListError.add("false");
+            
+            returnPackage = new PseudoPackage(requestError,arrayListError);
+            return returnPackage;
         }
 
         //recebe do servidor o numero de pacotes que serao enviados como resposta
@@ -111,34 +118,47 @@ public class ClientDistribution {
         reader.setLenient(true);
         PseudoPackage receivedFromServerLengthPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
-        
-        //transforma o numero de pacotes de resposta em int
-        int numPackages = Integer.parseInt(receivedFromServerLengthPackage.getContent().get(0));
-        
-        //matriz de byte que recebera os pacotes de resposta
-        byte [][] fragmentedPackage = new byte [numPackages][BYTE_LENGTH];
-        
-        //recebe os pacotes e os armazena na matriz de byte
-        for (int i = 0; i < numPackages; i++) {
-            DatagramPacket receivedFromServer = new DatagramPacket(receiveData,
-                    receiveData.length);
 
-            clientSocket.receive(receivedFromServer);
-            byte [] aux = receivedFromServer.getData();
+        if (receivedFromServerLengthPackage.getRequestType().equals(RequestType.NUMPACKAGE)) {
             
-            System.arraycopy(aux, 0, fragmentedPackage[i], 0, aux.length);
+            //transforma o numero de pacotes de resposta em int
+            int numPackages = Integer.parseInt(receivedFromServerLengthPackage.getContent().get(0));
+
+            //matriz de byte que recebera os pacotes de resposta
+            byte[][] fragmentedPackage = new byte[numPackages][BYTE_LENGTH];
+
+            //recebe os pacotes e os armazena na matriz de byte
+            for (int i = 0; i < numPackages; i++) {
+                DatagramPacket receivedFromServer = new DatagramPacket(receiveData,
+                        receiveData.length);
+
+                clientSocket.receive(receivedFromServer);
+                byte[] aux = receivedFromServer.getData();
+
+                System.arraycopy(aux, 0, fragmentedPackage[i], 0, aux.length);
+            }
+
+            //desfragmenta, ordena os pacotes recebidos e os converte novamente para
+            //um pseudoPackage
+            String receivedObject = packageShredder.defragment(fragmentedPackage);
+            reader = new JsonReader(new StringReader(receivedObject));
+            reader.setLenient(true);
+            PseudoPackage returnPackage = gson.fromJson(reader, PseudoPackage.class);
+            reader.close();
+
+            //retorna o resultado
+            return returnPackage;
+        }else{
+            PseudoPackage returnPackage;
+            RequestType requestError = RequestType.CONFIRMATIONPACKAGE;
+            ArrayList<String> arrayListError = new ArrayList();
+            arrayListError.add("false");
+            
+            returnPackage = new PseudoPackage(requestError,arrayListError);
+            
+            return returnPackage;
         }
         
-        //desfragmenta, ordena os pacotes recebidos e os converte novamente para
-        //um pseudoPackage
-        String receivedObject = packageShredder.defragment(fragmentedPackage);
-        reader = new JsonReader(new StringReader(receivedObject));
-        reader.setLenient(true);
-        PseudoPackage returnPackage = gson.fromJson(reader, PseudoPackage.class);
-        reader.close();
-        
-        //retorna o resultado
-        return returnPackage;
     }
 
 }
