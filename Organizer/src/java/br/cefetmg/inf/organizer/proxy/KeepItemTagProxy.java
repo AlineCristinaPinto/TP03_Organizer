@@ -1,15 +1,18 @@
 package br.cefetmg.inf.organizer.proxy;
 
 import br.cefetmg.inf.organizer.dist.ClientDistribution;
+import br.cefetmg.inf.organizer.model.domain.Item;
 import br.cefetmg.inf.organizer.model.domain.ItemTag;
 import br.cefetmg.inf.organizer.model.domain.Tag;
 import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.util.PseudoPackage;
 import br.cefetmg.inf.util.RequestType;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -96,7 +99,13 @@ public class KeepItemTagProxy implements IKeepItemTag{
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(reader, ArrayList.class);
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
+            
              
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);

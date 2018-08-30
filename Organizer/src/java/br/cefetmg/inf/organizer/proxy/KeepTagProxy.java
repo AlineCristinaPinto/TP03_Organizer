@@ -164,12 +164,13 @@ public class KeepTagProxy implements IKeepTag {
             JsonReader reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
 
-            Type type = new TypeToken<ArrayList<Tag>>() {
-            }.getType();
-
-            listAllTag = json.fromJson(reader, type);
-
-            return listAllTag;
+            if (receivedPackage.getContent().get(0).equals("false")) {
+                return null;
+            } else {
+                Type type = new TypeToken<ArrayList<Tag>>() {
+                }.getType();
+                return json.fromJson(reader, type);
+            }
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -198,12 +199,15 @@ public class KeepTagProxy implements IKeepTag {
             JsonReader reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
 
-            returnId = json.fromJson(reader, Long.class);
-
-            return returnId;
+            if (receivedPackage.getContent().get(0).equals("false")) {
+                return null;
+            } else {
+                returnId = json.fromJson(reader, Long.class);
+                return returnId;
+            }
 
         } catch (IOException ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
         return null;
     }
@@ -228,10 +232,12 @@ public class KeepTagProxy implements IKeepTag {
             JsonReader reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
 
-            returnTag = json.fromJson(reader, Tag.class);
-
-            return returnTag;
-
+            if (receivedPackage.getContent().get(0).equals("false")) {
+                return null;
+            } else {
+                returnTag = json.fromJson(reader, Tag.class);
+                return returnTag;
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -16,31 +16,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 public class ChangeTarefaStatus implements GenericProcess {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        
+
         String pageJSP = "";
         List<Item> itemList;
-        
+
         // Pegando usuário
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-      
+
         String idItemString = req.getParameter("takeId");
-        Long idItem = Long.parseLong(idItemString); 
-        
-        IKeepItem keepItem = new KeepItemProxy();        
+        Long idItem = Long.parseLong(idItemString);
+
+        IKeepItem keepItem = new KeepItemProxy();
         Item item = keepItem.searchItemById(idItem);
-        
+
         item.setIdentifierStatus("A");
         item.setUser(user);
-        
+
         boolean result = keepItem.updateItem(item);
-        
-        if(!result){
+
+        if (!result) {
             ErrorObject error = new ErrorObject();
             error.setErrorName("Tente novamente");
             error.setErrorDescription("Erro ao reativar tarefa");
@@ -49,16 +48,8 @@ public class ChangeTarefaStatus implements GenericProcess {
             pageJSP = "/error.jsp";
         } else {
             IKeepTag keepTag = new KeepTagProxy();
-            Long idConclude = keepTag.searchTagByName("Concluidos", user);            
-            Tag concludeTag = keepTag.searchTagById(idConclude);
-            
-            ArrayList<Tag> tag = new ArrayList();
-            tag.add(concludeTag);
-           
-            IKeepItemTag keepItemTag = new KeepItemTagProxy();
-            result = keepItemTag.deleteTagInItem(tag, idItem);
-            
-            if(!result){
+            Long idConclude = keepTag.searchTagByName("Concluidos", user);
+            if (idConclude == null) {
                 ErrorObject error = new ErrorObject();
                 error.setErrorName("Tente novamente");
                 error.setErrorDescription("Erro ao reativar tarefa");
@@ -66,25 +57,50 @@ public class ChangeTarefaStatus implements GenericProcess {
                 req.getSession().setAttribute("error", error);
                 pageJSP = "/error.jsp";
             } else {
-                itemList = keepItem.listAllItem(user);
-                if(itemList == null){
-                    req.setAttribute("itemList", new ArrayList());
-                }else{
-                    req.setAttribute("itemList", itemList);
-                }
-                
-                List<Tag> tagList = keepTag.listAlltag(user);
-                if (tagList == null) {
-                   req.getSession().setAttribute("tagList", new ArrayList());
+                Tag concludeTag = keepTag.searchTagById(idConclude);
+                if (concludeTag == null) {
+                    ErrorObject error = new ErrorObject();
+                    error.setErrorName("Tente novamente");
+                    error.setErrorDescription("Erro ao reativar tarefa");
+                    error.setErrorSubtext("Não foi possível reativar a tarefa.");
+                    req.getSession().setAttribute("error", error);
+                    pageJSP = "/error.jsp";
                 } else {
-                    req.getSession().setAttribute("tagList", tagList);
+                    ArrayList<Tag> tag = new ArrayList();
+                    tag.add(concludeTag);
+
+                    IKeepItemTag keepItemTag = new KeepItemTagProxy();
+                    result = keepItemTag.deleteTagInItem(tag, idItem);
+
+                    if (!result) {
+                        ErrorObject error = new ErrorObject();
+                        error.setErrorName("Tente novamente");
+                        error.setErrorDescription("Erro ao reativar tarefa");
+                        error.setErrorSubtext("Não foi possível reativar a tarefa.");
+                        req.getSession().setAttribute("error", error);
+                        pageJSP = "/error.jsp";
+                    } else {
+                        itemList = keepItem.listAllItem(user);
+                        if (itemList == null) {
+                            req.setAttribute("itemList", new ArrayList());
+                        } else {
+                            req.setAttribute("itemList", itemList);
+                        }
+
+                        List<Tag> tagList = keepTag.listAlltag(user);
+                        if (tagList == null) {
+                            req.getSession().setAttribute("tagList", new ArrayList());
+                        } else {
+                            req.getSession().setAttribute("tagList", tagList);
+                        }
+
+                        pageJSP = "/index.jsp";
+                    }
                 }
-                
-                pageJSP = "/index.jsp";
             }
         }
-       
+
         return pageJSP;
     }
-    
+
 }

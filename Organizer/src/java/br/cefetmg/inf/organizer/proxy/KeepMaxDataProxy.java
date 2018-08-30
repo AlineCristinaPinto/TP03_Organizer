@@ -14,9 +14,11 @@ import br.cefetmg.inf.util.PseudoPackage;
 import br.cefetmg.inf.util.RequestType;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -117,7 +119,12 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(reader, ArrayList.class);
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,7 +152,12 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(reader, ArrayList.class);
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,7 +185,12 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(reader, ArrayList.class);
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -201,7 +218,12 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader = new JsonReader(new StringReader(receivedPackage.getContent().get(0)));
             reader.setLenient(true);
            
-            return json.fromJson(reader, ArrayList.class);
+            if(receivedPackage.getContent().get(0).equals("false")){
+                return null;
+            }else{
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                return json.fromJson(reader, type);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
