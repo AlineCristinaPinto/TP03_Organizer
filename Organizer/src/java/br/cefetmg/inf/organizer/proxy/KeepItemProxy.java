@@ -195,7 +195,7 @@ public class KeepItemProxy implements IKeepItem {
     @Override
     public ArrayList<Item> searchItemByTag(List<Tag> tagList, User user) throws PersistenceException {
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         ArrayList<String> jsonContent;
         JsonReader reader;
@@ -231,7 +231,7 @@ public class KeepItemProxy implements IKeepItem {
         
         PseudoPackage contentPackage;
         JsonReader reader;
-        Gson json = new Gson();
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -266,7 +266,7 @@ public class KeepItemProxy implements IKeepItem {
     public ArrayList<Item> searchItemByTagAndType(List<Tag> tagList, List<String> typeList, User user) throws PersistenceException {
         PseudoPackage contentPackage;
         JsonReader reader;
-        Gson json = new Gson();
+        Gson  json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         ArrayList<String> jsonContent;
         jsonContent = new ArrayList();
