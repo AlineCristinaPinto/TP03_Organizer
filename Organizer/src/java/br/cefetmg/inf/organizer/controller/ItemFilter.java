@@ -123,10 +123,10 @@ public class ItemFilter implements GenericProcess {
 
         IKeepTag keepTag = new KeepTagProxy();
         List<Tag> tagListAll = keepTag.listAlltag(user);
-        if (tagList == null) {
-            req.setAttribute("tagList", new ArrayList());
+        if (tagListAll == null) {
+            req.getSession().setAttribute("tagList", new ArrayList());
         } else {
-            req.setAttribute("tagList", tagListAll);
+            req.getSession().setAttribute("tagList", tagListAll);
         }
 
         return pageJSP;

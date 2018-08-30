@@ -153,7 +153,7 @@ Tento fazer um value="${user.userName}" e também não funciona. Por isso, infel
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" >Cancelar</button>
+                                <a href="index.jsp"><button type="button" class="btn btn-secondary" >Cancelar</button></a>
                                 <button type="button" class="btn btn-primary" onclick="validateFieldsDeleteAccount()">Excluir</button>
                             </div>
                         </form>

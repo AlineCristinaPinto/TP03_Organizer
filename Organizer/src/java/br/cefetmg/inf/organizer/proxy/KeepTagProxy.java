@@ -18,8 +18,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class KeepTagProxy implements IKeepTag {
 
@@ -46,7 +44,7 @@ public class KeepTagProxy implements IKeepTag {
 
             return Boolean.valueOf(receivedPackage.getContent().get(0));
         } catch (IOException ex) {
-
+            ex.printStackTrace();
         }
         return false;
     }
@@ -74,7 +72,7 @@ public class KeepTagProxy implements IKeepTag {
             return returnTag;
 
         } catch (IOException ex) {
-
+            ex.printStackTrace();
         }
         return returnTag;
     }
@@ -96,7 +94,7 @@ public class KeepTagProxy implements IKeepTag {
 
             return Boolean.valueOf(receivedPackage.getContent().get(0));
         } catch (IOException ex) {
-
+            ex.printStackTrace();
         }
         return false;
     }
@@ -119,7 +117,7 @@ public class KeepTagProxy implements IKeepTag {
 
             return Boolean.valueOf(receivedPackage.getContent().get(0));
         } catch (IOException ex) {
-
+            ex.printStackTrace();
         }
         return false;
     }
@@ -141,7 +139,7 @@ public class KeepTagProxy implements IKeepTag {
 
             return Boolean.valueOf(receivedPackage.getContent().get(0));
         } catch (IOException ex) {
-
+            ex.printStackTrace();
         }
         return false;
     }
@@ -174,7 +172,7 @@ public class KeepTagProxy implements IKeepTag {
             return listAllTag;
 
         } catch (IOException ex) {
-            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return null;
     }
@@ -205,7 +203,7 @@ public class KeepTagProxy implements IKeepTag {
             return returnId;
 
         } catch (IOException ex) {
-            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
         }
         return null;
     }
@@ -235,7 +233,7 @@ public class KeepTagProxy implements IKeepTag {
             return returnTag;
 
         } catch (IOException ex) {
-            Logger.getLogger(KeepUserProxy.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return null;
     }
