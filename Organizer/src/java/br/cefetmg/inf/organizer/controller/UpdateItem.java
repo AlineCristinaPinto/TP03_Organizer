@@ -54,7 +54,7 @@ public class UpdateItem implements GenericProcess {
 
         ArrayList<Tag> tagItem = new ArrayList();
 
-        /*if(!tag.isEmpty()){
+        if(!tag.isEmpty()){
             String[] vetTag = tag.split(";");
             
             IKeepTag keepTag = new KeepTagProxy();
@@ -140,7 +140,7 @@ public class UpdateItem implements GenericProcess {
                 }
             }
         
-        }*/
+        }
         // Instanciando item para update
         Item item = new Item();
 
@@ -166,7 +166,7 @@ public class UpdateItem implements GenericProcess {
             pageJSP = "/error.jsp";
         } else {
 
-            /*if(!deleteTag.isEmpty()){
+            if(!deleteTag.isEmpty()){
                 result = keepItemTag.deleteTagInItem(deleteTag, idItem);
                 
                 if(!result){
@@ -237,7 +237,7 @@ public class UpdateItem implements GenericProcess {
                         }
                         pageJSP = "/index.jsp";
                     }
-                } else {*/
+                } else {
             itemList = keepItem.listAllItem(user);
             if (itemList == null) {
                 req.setAttribute("itemList", new ArrayList());
@@ -245,8 +245,8 @@ public class UpdateItem implements GenericProcess {
                 req.setAttribute("itemList", itemList);
             }
 
-            IKeepTag keepTag = new KeepTagProxy();
-            List<Tag> tagList = keepTag.listAlltag(user);
+            IKeepTag keepTags = new KeepTagProxy();
+            List<Tag> tagList = keepTags.listAlltag(user);
             if (tagList == null) {
                req.getSession().setAttribute("tagList", new ArrayList());
             } else {
@@ -254,8 +254,8 @@ public class UpdateItem implements GenericProcess {
             }
 
             pageJSP = "/index.jsp";
-            // }
-            // }             
+            }
+        }             
 
         }
 

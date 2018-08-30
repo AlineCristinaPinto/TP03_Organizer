@@ -21,13 +21,13 @@ public class LoadTagsToCreateItem implements GenericProcess{
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         
-        /*IKeepTag keepTag = new KeepTagProxy();
+        IKeepTag keepTag = new KeepTagProxy();
         tagList = keepTag.listAlltag(user);
         if (tagList == null) {
             req.setAttribute("tagList", new ArrayList());
         } else {
             req.setAttribute("tagList", tagList);
-        }*/
+        }
         
         pageJSP = "/createItem.jsp";
         

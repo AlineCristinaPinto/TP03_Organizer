@@ -13,7 +13,6 @@ import br.cefetmg.inf.organizer.proxy.KeepTagProxy;
 import br.cefetmg.inf.util.ErrorObject;
 import com.google.gson.Gson;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -160,13 +159,6 @@ public class CreateItem implements GenericProcess {
             } else {
                 itemList = keepItem.listAllItem(user);
 
-                /*for(Item itemIterator: itemList){
-                    double asd = (double)itemIterator.getSeqItem(); 
-                    DecimalFormat format = new DecimalFormat("##"); 
-                    asd = Double.parseDouble(format.format(asd));
-                    Long value = (new Double(asd)).longValue();;                            
-                    itemIterator.setSeqItem(value);
-                }*/
                 if (itemList == null) {
                     req.setAttribute("itemList", new ArrayList());
                 } else {
