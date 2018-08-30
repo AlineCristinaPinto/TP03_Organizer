@@ -58,14 +58,7 @@ public class ChangeTarefaStatus implements GenericProcess {
                 pageJSP = "/error.jsp";
             } else {
                 Tag concludeTag = keepTag.searchTagById(idConclude);
-
-                ArrayList<Tag> tag = new ArrayList();
-                tag.add(concludeTag);
-
-                IKeepItemTag keepItemTag = new KeepItemTagProxy();
-                result = keepItemTag.deleteTagInItem(tag, idItem);
-
-                if (!result) {
+                if (concludeTag == null) {
                     ErrorObject error = new ErrorObject();
                     error.setErrorName("Tente novamente");
                     error.setErrorDescription("Erro ao reativar tarefa");
@@ -73,21 +66,36 @@ public class ChangeTarefaStatus implements GenericProcess {
                     req.getSession().setAttribute("error", error);
                     pageJSP = "/error.jsp";
                 } else {
-                    itemList = keepItem.listAllItem(user);
-                    if (itemList == null) {
-                        req.setAttribute("itemList", new ArrayList());
-                    } else {
-                        req.setAttribute("itemList", itemList);
-                    }
+                    ArrayList<Tag> tag = new ArrayList();
+                    tag.add(concludeTag);
 
-                    List<Tag> tagList = keepTag.listAlltag(user);
-                    if (tagList == null) {
-                        req.getSession().setAttribute("tagList", new ArrayList());
-                    } else {
-                        req.getSession().setAttribute("tagList", tagList);
-                    }
+                    IKeepItemTag keepItemTag = new KeepItemTagProxy();
+                    result = keepItemTag.deleteTagInItem(tag, idItem);
 
-                    pageJSP = "/index.jsp";
+                    if (!result) {
+                        ErrorObject error = new ErrorObject();
+                        error.setErrorName("Tente novamente");
+                        error.setErrorDescription("Erro ao reativar tarefa");
+                        error.setErrorSubtext("Não foi possível reativar a tarefa.");
+                        req.getSession().setAttribute("error", error);
+                        pageJSP = "/error.jsp";
+                    } else {
+                        itemList = keepItem.listAllItem(user);
+                        if (itemList == null) {
+                            req.setAttribute("itemList", new ArrayList());
+                        } else {
+                            req.setAttribute("itemList", itemList);
+                        }
+
+                        List<Tag> tagList = keepTag.listAlltag(user);
+                        if (tagList == null) {
+                            req.getSession().setAttribute("tagList", new ArrayList());
+                        } else {
+                            req.getSession().setAttribute("tagList", tagList);
+                        }
+
+                        pageJSP = "/index.jsp";
+                    }
                 }
             }
         }
