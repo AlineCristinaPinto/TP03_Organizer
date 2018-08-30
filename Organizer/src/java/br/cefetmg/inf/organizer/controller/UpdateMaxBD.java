@@ -69,16 +69,6 @@ public class UpdateMaxBD implements GenericProcess{
         boolean itemSuccess = keepMaxData.updateAllItems(maxDataObject);//PARAMETROS
         boolean tagSuccess = keepMaxData.updateAllTags(maxDataObject);//PARAMETROS
         
-        List<Item> itemList;
-        IKeepItem keepItem = new KeepItemProxy();
-        
-        itemList = keepItem.listAllItem(user);
-        if(itemList == null){
-            req.setAttribute("itemList", new ArrayList());
-        }else{
-            req.setAttribute("itemList", itemList);
-        }
-        
         if(itemSuccess && tagSuccess && itemTagSuccess){          
             pageJSP = "/index.jsp";
         }else{

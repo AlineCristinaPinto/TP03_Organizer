@@ -32,7 +32,7 @@
         <input type="radio" name="group" id="rd_manual">
         <section class="sections">
             <section class="block" id="max">
-                <a href="index.jsp">Voltar</a>
+                <a href="/organizer/servletcontroller?process=LoadItem">Voltar</a>
                 <div>
                     <div class="division">
                         <span style="color: #1E90FF;">Você diz:</span> <br> 
