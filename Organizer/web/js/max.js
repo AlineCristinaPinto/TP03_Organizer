@@ -236,7 +236,7 @@ function updateBD() {
             itemsTags : JSON.stringify( convertedItemsTags( itemsTags ) )
         },
         success : function(responseText) {
-            window.location.href = "/organizer/index.jsp";
+            window.location.href = "/organizer/servletcontroller?process=LoadItem";
         }
     }); 
 }
@@ -666,22 +666,6 @@ function sayMax() {
         if( compare( txtTranscripted, "nenhuma" ) != 0 ){
             itemDescription = txtTranscripted;
 
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         process : "CreateItem",
-            //         selectType : itemType,
-            //         nameItem : itemName,
-            //         descriptionItem : itemDescription,
-            //         dateItem : null,
-            //         inputTag : null
-            //     },
-            //     success : function(responseText) {
-            //         window.location.href = "/organizer/index.jsp";
-            //     }
-            // });  
-
             if( createItem( itemType, itemName, itemDescription, null ) == 0 ){
                 document.getElementById( 'speech' ).value = "Item criado com sucesso!";
                 myVoice.text = "Item criado com sucesso!";
@@ -696,22 +680,6 @@ function sayMax() {
             itemName = 0;
             itemDescription = 0;    
         }else{
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         process : "CreateItem",
-            //         selectType : itemType,
-            //         nameItem : itemName,
-            //         descriptionItem : null,
-            //         dateItem : null,
-            //         inputTag : null
-            //     },
-            //     success : function(responseText) {
-            //         window.location.href = "/organizer/index.jsp";
-            //     }
-            // }); 
 
             if( createItem( itemType, itemName, null, null ) == 0 ){
                 document.getElementById( 'speech' ).value = "Item criado com sucesso!";
@@ -752,22 +720,6 @@ function sayMax() {
             itemDate = convertDate( txtTranscripted );
             if( itemDate != 1 ){  
 
-                // $.ajax({
-                //     url : '/organizer/servletcontroller',
-                //     type: "POST",
-                //     data : {
-                //         process : "CreateItem",
-                //         selectType : itemType,
-                //         nameItem : itemName,
-                //         descriptionItem : itemDescription,
-                //         dateItem : convertDateToBDFormat( itemDate ),
-                //         inputTag : null
-                //     },
-                //     success : function(responseText) {
-                //         window.location.href = "/organizer/index.jsp";
-                //     }
-                // }); 
-
                 if( createItem( itemType, itemName, itemDescription, itemDate ) == 0 ){
                     document.getElementById( 'speech' ).value = "Item criado com sucesso!";
                     myVoice.text = "Item criado com sucesso!";
@@ -787,22 +739,6 @@ function sayMax() {
             itemDescription = 0;    
             itemDate = 0;
         }else{
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         process : "CreateItem",
-            //         selectType : itemType,
-            //         nameItem : itemName,
-            //         descriptionItem : itemDescription,
-            //         dateItem : null,
-            //         inputTag : null
-            //     },
-            //     success : function(responseText) {
-            //         window.location.href = "/organizer/index.jsp";
-            //     }
-            // }); 
 
             if( createItem( itemType, itemName, itemDescription, null ) == 0 ){
                 document.getElementById( 'speech' ).value = "Item criado com sucesso!";
@@ -851,22 +787,6 @@ function sayMax() {
             itemDate = convertDate( txtTranscripted );
             if( itemDate != 1 ){
 
-                // $.ajax({
-                //     url : '/organizer/servletcontroller',
-                //     type: "POST",
-                //     data : {
-                //         process : "CreateItem",
-                //         selectType : itemType,
-                //         nameItem : itemName,
-                //         descriptionItem : itemDescription,
-                //         dateItem : convertDateToBDFormat( itemDate ),
-                //         inputTag : null
-                //     },
-                //     success : function(responseText) {
-                //         window.location.href = "/organizer/index.jsp";
-                //     }
-                // }); 
-
                 if( createItem( itemType, itemName, itemDescription, itemDate ) == 0 ){
                     document.getElementById( 'speech' ).value = "Item criado com sucesso!";
                     myVoice.text = "Item criado com sucesso!";
@@ -886,22 +806,6 @@ function sayMax() {
             itemDescription = 0;    
             itemDate = 0;
         }else{
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         process : "CreateItem",
-            //         selectType : itemType,
-            //         nameItem : itemName,
-            //         descriptionItem : itemDescription,
-            //         dateItem : null,
-            //         inputTag : null
-            //     },
-            //     success : function(responseText) {
-            //         window.location.href = "/organizer/index.jsp";
-            //     }
-            // }); 
 
             if( createItem( itemType, itemName, itemDescription, null ) == 0 ){
                 document.getElementById( 'speech' ).value = "Item criado com sucesso!";
@@ -949,22 +853,6 @@ function sayMax() {
 
     if( action == 4 ){
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         process : "UpdateItem",
-        //         nameItem : txtTranscripted,
-        //         descriptionItem : itemsDescription[ itemsName.indexOf(itemName) ],
-        //         dateItem : itemsDate[ itemsName.indexOf(itemName) ],
-        //         inputTag : null
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // }); 
-
         if( alterItemName( itemName, txtTranscripted ) == 0 ){
             document.getElementById( 'speech' ).value = "Item alterado com sucesso!";
             myVoice.text = "Item alterado com sucesso!";
@@ -981,19 +869,6 @@ function sayMax() {
     if( txtTranscripted.toLowerCase().indexOf( "alterar nome do item " ) == 0 && itemName == 0 ){
         action = 4;
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "itemNameExists",
-        //         itemName : txtTranscripted.slice( 21, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( itemNameExists( txtTranscripted.slice( 21, txtTranscripted.length ) ) == 1 ){
             itemName = txtTranscripted.slice( 21, txtTranscripted.length );
             document.getElementById( 'speech' ).value = "Qual o novo nome?";
@@ -1008,20 +883,6 @@ function sayMax() {
     //descrição - action 5
 
     if( action == 5 ){
-
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "alterItemDescription",
-        //         itemName : itemName,
-        //         newDescription: txtTranscripted
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
 
         if( alterItemDescription( itemName, txtTranscripted ) == 0 ){
             document.getElementById( 'speech' ).value = "Item alterado com sucesso!";
@@ -1038,19 +899,6 @@ function sayMax() {
 
     if( txtTranscripted.toLowerCase().indexOf( "alterar descrição do item " ) == 0 && itemName == 0 ){
         action = 5;
-
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "itemNameExists",
-        //         itemName : txtTranscripted.slice( 26, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
 
         if( itemNameExists( txtTranscripted.slice( 26, txtTranscripted.length ) ) == 1 ){
             itemName = txtTranscripted.slice( 26, txtTranscripted.length );
@@ -1069,20 +917,6 @@ function sayMax() {
     if( action == 6 ){
         itemDate = convertDate( txtTranscripted );
         if( itemDate != 1 ){
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "alterItemDate",
-            //         itemName = itemName,
-            //         itemDate = itemDate
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
 
             if( alterItemDate( itemName, itemDate ) == 0 ){
                 document.getElementById( 'speech' ).value = "Item alterado com sucesso!";
@@ -1104,19 +938,6 @@ function sayMax() {
 
     if( txtTranscripted.toLowerCase().indexOf( "alterar data do item " ) == 0 && itemName == 0 ){
         action = 6;
-
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "itemNameExists",
-        //         itemName : txtTranscripted.slice( 21, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
 
         if( itemNameExists( txtTranscripted.slice( 21, txtTranscripted.length ) ) == 1 ){
             itemName = txtTranscripted.slice( 21, txtTranscripted.length );
@@ -1158,33 +979,7 @@ function sayMax() {
 
     if( txtTranscripted.toLowerCase().indexOf( "excluir item " ) == 0 ){     
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "itemNameExists",
-        //         itemName : txtTranscripted.slice( 13, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( itemNameExists( txtTranscripted.slice( 13, txtTranscripted.length ) ) == 1 ){
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "deleteItem",
-            //         itemName : txtTranscripted.slice( 13, txtTranscripted.length )
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
 
             if( deleteItem( txtTranscripted.slice( 13, txtTranscripted.length ) ) == 0 ){
                 document.getElementById( 'speech' ).value = "Item excluído com sucesso!";
@@ -1204,33 +999,7 @@ function sayMax() {
 
     if( txtTranscripted.toLowerCase().indexOf( "excluir itens com a tag " ) == 0 ){  
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "tagNameExists",
-        //         tagName : txtTranscripted.slice( 24, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( tagNameExists( txtTranscripted.slice( 24, txtTranscripted.length ) ) == 1 ){
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "deleteTagItems",
-            //         tagName : txtTranscripted.slice( 24, txtTranscripted.length )
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
 
             var result =  deleteTagItems( txtTranscripted.slice( 24, txtTranscripted.length ) );
             if( result == 0 ){
@@ -1560,33 +1329,7 @@ function sayMax() {
 
     if( txtTranscripted.toLowerCase().indexOf( "criar tag " ) == 0 ){
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "tagNameExists",
-        //         tagName : txtTranscripted.slice( 10, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( tagNameExists( txtTranscripted.slice( 10, txtTranscripted.length ) ) == 0 ){
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "createTag",
-            //         tagName : txtTranscripted.slice( 10, txtTranscripted.length )
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
 
             if( createTag( txtTranscripted.slice( 10, txtTranscripted.length ) ) == 0 ){        
                     document.getElementById( 'speech' ).value = "Tag criada com sucesso!";
@@ -1606,20 +1349,6 @@ function sayMax() {
 
     if( action == 17 ){
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "alterTagName",
-        //         tagName : tagName,
-        //         newName : txtTranscripted
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( alterTagName( tagName, txtTranscripted ) == 0 ){
             document.getElementById( 'speech' ).value = "Tag alterada com sucesso!";
             myVoice.text = "Tag alterada com sucesso!";
@@ -1636,19 +1365,6 @@ function sayMax() {
     if( txtTranscripted.toLowerCase().indexOf( "alterar nome da tag " ) == 0 ){
         action = 17;
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "tagNameExists",
-        //         tagName : txtTranscripted.slice( 20, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( tagNameExists( txtTranscripted.slice( 20, txtTranscripted.length ) ) == 1 ){
             tagName = txtTranscripted.slice( 20, txtTranscripted.length );
             document.getElementById( 'speech' ).value = "Qual o novo nome?";
@@ -1664,19 +1380,6 @@ function sayMax() {
 
     if( action == 18 ){
         if( compare( txtTranscripted, "sim" ) == 0 ){
-
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "deleteTag",
-            //         tagName : tagName
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
 
             if( deleteTag( tagName ) == 0 ){
                 document.getElementById( 'speech' ).value = "Tag excluída com sucesso!";
@@ -1702,48 +1405,11 @@ function sayMax() {
         action = 18;
         tagName = txtTranscripted.slice( 12, txtTranscripted.length );
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "tagNameExists",
-        //         tagName : tagName
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( tagNameExists( tagName ) == 1 ){
 
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "tagItemsExist",
-            //         tagName : tagName
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
 
             if( tagItemsExist( tagName ) == 0 ){
 
-                // $.ajax({
-                //     url : '/organizer/servletcontroller',
-                //     type: "POST",
-                //     data : {
-                //         function : "deleteTag",
-                //         tagName : tagName
-                //     },
-                //     success : function(responseText) {
-                //         response = responseText;
-                //         alert(responseText);
-                //     }
-                // });
 
                 if( deleteTag( tagName ) == 0 ){
                     document.getElementById( 'speech' ).value = "Tag excluída com sucesso!";
@@ -1775,50 +1441,9 @@ function sayMax() {
 
     if( action == 19 ){
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "tagNameExists",
-        //         tagName : txtTranscripted
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( tagNameExists( txtTranscripted ) == 1 ){
 
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "itemTagExists",
-            //         itemName : itemName,
-            //         tagName : txtTranscripted
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
-
             if( itemTagExists( itemName, txtTranscripted ) == 0 ){
-
-                // $.ajax({
-                //     url : '/organizer/servletcontroller',
-                //     type: "POST",
-                //     data : {
-                //         function : "addTagToItem",
-                //         itemName : itemName,
-                //         tagName : txtTranscripted
-                //     },
-                //     success : function(responseText) {
-                //         response = responseText;
-                //         alert(responseText);
-                //     }
-                // });
 
                 if( addTagToItem( itemName, txtTranscripted ) == 0 ){
                     document.getElementById( 'speech' ).value = "Tag adicionada com sucesso!";
@@ -1844,19 +1469,6 @@ function sayMax() {
     if( txtTranscripted.toLowerCase().indexOf( "adicionar tag ao item " ) == 0 && itemName == 0 ){
         action = 19;
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "itemNameExists",
-        //         itemName : txtTranscripted.slice( 22, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( itemNameExists( txtTranscripted.slice( 22, txtTranscripted.length ) ) == 1 ){
             itemName = txtTranscripted.slice( 22, txtTranscripted.length );
             document.getElementById( 'speech' ).value = "Qual o nome da tag?";
@@ -1872,50 +1484,9 @@ function sayMax() {
 
     if( action == 20 ){
 
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "tagNameExists",
-        //         tagName : txtTranscripted
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
-
         if( tagNameExists( txtTranscripted ) == 1 ){
 
-            // $.ajax({
-            //     url : '/organizer/servletcontroller',
-            //     type: "POST",
-            //     data : {
-            //         function : "itemTagExists",
-            //         itemName : itemName,
-            //         tagName : txtTranscripted
-            //     },
-            //     success : function(responseText) {
-            //         response = responseText;
-            //         alert(responseText);
-            //     }
-            // });
-
             if( itemTagExists( itemName, txtTranscripted ) == 1 ){
-
-                // $.ajax({
-                //     url : '/organizer/servletcontroller',
-                //     type: "POST",
-                //     data : {
-                //         function : "removeTagFromItem",
-                //         itemName : itemName,
-                //         tagName : txtTranscripted
-                //     },
-                //     success : function(responseText) {
-                //         response = responseText;
-                //         alert(responseText);
-                //     }
-                // });
 
                 if( removeTagFromItem( itemName, txtTranscripted ) == 0 ){
                     document.getElementById( 'speech' ).value = "Tag removida com sucesso!";
@@ -1940,19 +1511,6 @@ function sayMax() {
 
     if( txtTranscripted.toLowerCase().indexOf( "remover tag do item " ) == 0 && itemName == 0 ){
         action = 20;
-
-        // $.ajax({
-        //     url : '/organizer/servletcontroller',
-        //     type: "POST",
-        //     data : {
-        //         function : "itemNameExists",
-        //         itemName : txtTranscripted.slice( 20, txtTranscripted.length )
-        //     },
-        //     success : function(responseText) {
-        //         response = responseText;
-        //         alert(responseText);
-        //     }
-        // });
 
         if( itemNameExists( txtTranscripted.slice( 20, txtTranscripted.length ) ) == 1 ){
             itemName = txtTranscripted.slice( 20, txtTranscripted.length );

@@ -120,6 +120,7 @@ public class KeepMaxDataProxy implements IKeepMaxData {
             reader.setLenient(true);
            
             if(receivedPackage.getContent().get(0).equals("false")){
+                System.out.println(receivedPackage.getContent().get(0));
                 return null;
             }else{
                 Type type = new TypeToken<ArrayList<Item>>() {}.getType();
