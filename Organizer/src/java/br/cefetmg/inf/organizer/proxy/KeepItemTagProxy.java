@@ -8,6 +8,7 @@ import br.cefetmg.inf.organizer.model.service.IKeepItemTag;
 import br.cefetmg.inf.util.PseudoPackage;
 import br.cefetmg.inf.util.RequestType;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class KeepItemTagProxy implements IKeepItemTag{
     public boolean createTagInItem(ItemTag itemTag) {
         
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -56,7 +57,7 @@ public class KeepItemTagProxy implements IKeepItemTag{
     public boolean deleteTagInItem(ArrayList<Tag> itemTag, Long id) {
         
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -82,7 +83,7 @@ public class KeepItemTagProxy implements IKeepItemTag{
         
         PseudoPackage contentPackage;
         JsonReader reader;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -117,7 +118,7 @@ public class KeepItemTagProxy implements IKeepItemTag{
     public boolean deleteTagByItemId(Long idItem) {
        
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         
         List<String> jsonContent;
         jsonContent = new ArrayList();

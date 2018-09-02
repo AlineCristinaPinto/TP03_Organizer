@@ -9,6 +9,7 @@ import br.cefetmg.inf.util.RequestType;
 import br.cefetmg.inf.util.exception.BusinessException;
 import br.cefetmg.inf.util.exception.PersistenceException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
@@ -147,7 +148,7 @@ public class KeepTagProxy implements IKeepTag {
     @Override
     public ArrayList<Tag> listAlltag(User user) throws PersistenceException, BusinessException {
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -181,7 +182,7 @@ public class KeepTagProxy implements IKeepTag {
     @Override
     public Long searchTagByName(String nomeTag, User user) throws PersistenceException, BusinessException {
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -215,7 +216,7 @@ public class KeepTagProxy implements IKeepTag {
     @Override
     public Tag searchTagById(Long idTag) throws PersistenceException, BusinessException {
         PseudoPackage contentPackage;
-        Gson json = new Gson();
+        Gson json = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
         List<String> jsonContent;
         jsonContent = new ArrayList();
@@ -225,7 +226,7 @@ public class KeepTagProxy implements IKeepTag {
         contentPackage = new PseudoPackage(requestType, jsonContent);
 
         Tag returnTag;
-
+        
         try {
             PseudoPackage receivedPackage = client.request(contentPackage);
 
