@@ -103,6 +103,7 @@ public class ServerDistribution {
         } else {
             //caso o tipo da requisicao recebida nao seja o numero de pacotes,
             //envia ao cliente uma confirmacao de erro
+            System.out.println("Não recebeu num de pacotes");
             PseudoPackage confirmationPackage;
             List<String> jsonContent;
             jsonContent = new ArrayList();

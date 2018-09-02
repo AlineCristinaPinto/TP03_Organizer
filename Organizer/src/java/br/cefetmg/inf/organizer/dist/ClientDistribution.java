@@ -96,16 +96,6 @@ public class ClientDistribution {
                         sendData1.length, IPAddress, porta);
                 clientSocket.send(sendPackage);
             }
-        } else {
-            //Se houver falha de comunicação retorna false
-            System.out.println("Exceção: o número de pacotes não chegou ao servidor");
-            PseudoPackage returnPackage;
-            RequestType requestError = RequestType.RESPONSEPACKAGE;
-            ArrayList<String> arrayListError = new ArrayList();
-            arrayListError.add("false");
-
-            returnPackage = new PseudoPackage(requestError, arrayListError);
-            return returnPackage;
         }
 
         //recebe do servidor o numero de pacotes que serao enviados como resposta
@@ -120,26 +110,14 @@ public class ClientDistribution {
         PseudoPackage receivedFromServerLengthPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
 
+        ArrayList<String> errorList = new ArrayList<String>();
+        errorList.add("false");
+        
+        PseudoPackage returnPackage = new PseudoPackage(RequestType.RESPONSEPACKAGE , errorList);
         if (receivedFromServerLengthPackage.getRequestType().equals(RequestType.NUMPACKAGE)) {
 
             //transforma o numero de pacotes de resposta em int
             int numPackages = Integer.parseInt(receivedFromServerLengthPackage.getContent().get(0));
-
-            //prepara confirmação do recebimento do num de pacotes
-            byte[][] sendConfirmationServer;
-            RequestType requestTypeConfirmationServer = RequestType.RESPONSEPACKAGE;
-            jsonContent = new ArrayList();
-            jsonContent.add("true");
-            PseudoPackage confirmationToServerPackage = new PseudoPackage(requestTypeConfirmationServer, jsonContent);
-            sendConfirmationServer = packageShredder.fragment(gson.toJson(confirmationToServerPackage));
-
-            // manda confirmação de recebimento do pacote
-            for (byte[] sendConfirmationServer1 : sendConfirmationServer) {
-                DatagramPacket sendPackage = new DatagramPacket(sendConfirmationServer1,
-                        sendConfirmationServer1.length, IPAddress, porta+5);
-                clientSocket.send(sendPackage);
-            }
-
             //matriz de byte que recebera os pacotes de resposta
             byte[][] fragmentedPackage = new byte[numPackages][BYTE_LENGTH];
 
@@ -159,49 +137,11 @@ public class ClientDistribution {
             String receivedObject = packageShredder.defragment(fragmentedPackage);
             reader = new JsonReader(new StringReader(receivedObject));
             reader.setLenient(true);
-            PseudoPackage returnPackage = gson.fromJson(reader, PseudoPackage.class);
+            returnPackage = gson.fromJson(reader, PseudoPackage.class);
             reader.close();
-            
-            //Confere se o pacote é de resposta
-            if (returnPackage.getRequestType().equals(RequestType.RESPONSEPACKAGE)) {
-                //prepara confirmação do recebimento dos pacotes de resposta
-                requestTypeConfirmationServer = RequestType.RESPONSEPACKAGE;
-                jsonContent = new ArrayList();
-                jsonContent.add("true");
-                confirmationToServerPackage = new PseudoPackage(requestTypeConfirmationServer, jsonContent);
-                sendConfirmationServer = packageShredder.fragment(gson.toJson(confirmationToServerPackage));
-
-                // manda confirmação de recebimento do pacote
-                for (byte[] sendConfirmationServer1 : sendConfirmationServer) {
-                    DatagramPacket sendPackage = new DatagramPacket(sendConfirmationServer1,
-                            sendConfirmationServer1.length, IPAddress, porta+5);
-                    clientSocket.send(sendPackage);
-                }
-            } else {
-                //Se houver falha de comunicação retorna false
-                RequestType requestError = RequestType.RESPONSEPACKAGE;
-                ArrayList<String> arrayListError = new ArrayList();
-                arrayListError.add("false");
-
-                returnPackage = new PseudoPackage(requestError, arrayListError);
-
-                return returnPackage;
-            }
-            //retorna o resultado
-            return returnPackage;
-        } else {
-            //Se houver falha de comunicação retorna false
-            System.out.println("Exceção: Falha na comunicação");
-            PseudoPackage returnPackage;
-            RequestType requestError = RequestType.RESPONSEPACKAGE;
-            ArrayList<String> arrayListError = new ArrayList();
-            arrayListError.add("false");
-
-            returnPackage = new PseudoPackage(requestError, arrayListError);
-
-            return returnPackage;
         }
-
+        return returnPackage;
     }
-
 }
+
+

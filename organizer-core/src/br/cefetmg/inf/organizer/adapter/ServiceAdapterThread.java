@@ -45,13 +45,13 @@ public class ServiceAdapterThread implements Runnable {
     private PseudoPackage contentPackage;
     private Gson gson;
 
-    public ServiceAdapterThread(InetAddress IPAddress, int clientPort,int serverPort, PseudoPackage contentPackage) {
+    public ServiceAdapterThread(InetAddress IPAddress, int clientPort, int serverPort, PseudoPackage contentPackage) {
         this.IPAddress = IPAddress;
         this.clientPort = clientPort;
         this.contentPackage = contentPackage;
         this.serverPort = serverPort;
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-        
+
     }
 
     @Override
@@ -83,47 +83,15 @@ public class ServiceAdapterThread implements Runnable {
 
         RequestType requestTypeAux = RequestType.NUMPACKAGE;
         numPackage = new PseudoPackage(requestTypeAux, jsonContentAux);
-        
+
         System.out.println("Enviando número de pacotes de saída");
         //primeiramente envia o numero de pacotes de resposta ao cliente
         ServerDistribution.sendData(IPAddress, clientPort, numPackage);
-        if(expectConfirmationFromClient()){
-            System.out.println("Recebeu confirmação pacotes de saída");
-             //depois, envia os dados em si
-           ServerDistribution.sendData(IPAddress, clientPort, responsePackage);
-           if(!expectConfirmationFromClient()){
-               return;
-           }
-           System.out.println("Recebeu  pacotes de saída");
-        }else{
-            return;
-        }
-        
-    }
+        //depois, envia os dados em si
+        ServerDistribution.sendData(IPAddress, clientPort, responsePackage);
 
-    public boolean expectConfirmationFromClient() throws SocketException, IOException {
-        PseudoPackage confirmationPackage;
-        try (DatagramSocket serverSocket = new DatagramSocket(serverPort+5)) {
-            final int BYTE_LENGTH = 1024;
-            byte[] receiveData = new byte[BYTE_LENGTH];
-            InetAddress IPAddressClient;
-            DatagramPacket receivePacket;
-            //Testa se confirmação é do mesmo cliente
-            
-                receivePacket = new DatagramPacket(receiveData,
-                        receiveData.length);
-                serverSocket.receive(receivePacket);
-                
-                IPAddressClient = receivePacket.getAddress();
-                
-            
-            String receivedLength = new String(receivePacket.getData());
-            JsonReader reader = new JsonReader(new StringReader(receivedLength));
-            reader.setLenient(true);
-            confirmationPackage = gson.fromJson(reader, PseudoPackage.class);
-            reader.close();
-        }
-        return Boolean.valueOf(confirmationPackage.getContent().get(0));
+        System.out.println("Recebeu  pacotes de saída");
+
     }
 
     public void evaluateRequest() throws PersistenceException, BusinessException, IOException {
