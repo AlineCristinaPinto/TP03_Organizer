@@ -3,7 +3,7 @@ package br.cefetmg.inf.util;
 public enum RequestType {
     
     //Package 
-    NUMPACKAGE, CONFIRMATIONPACKAGE,
+    NUMPACKAGE, RESPONSEPACKAGE,
     //User
     REGISTERUSER, SEARCHUSER, UPDATEUSER, DELETEACCOUNT, GETUSERLOGIN,
     // Item

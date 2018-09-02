@@ -20,10 +20,10 @@ import java.util.List;
 public class ServerDistribution {
 
     private static DatagramSocket serverSocket;
-    private static int porta = 2233;
+    private static final int port = 22388;
 
     public static void main(String args[]) throws SocketException, IOException, PersistenceException, BusinessException {
-        serverSocket = new DatagramSocket(porta);
+        serverSocket = new DatagramSocket(port);
         while (true) {
             receiveData();
         }
@@ -52,7 +52,7 @@ public class ServerDistribution {
         reader.setLenient(true);
         PseudoPackage lengthPackage = gson.fromJson(reader, PseudoPackage.class);
         reader.close();
-        
+        System.out.println("Recebeu número de pacotes de entrada");
         //se o tipo de requisicao recebida for o numero de pacotes
         if (lengthPackage.getRequestType().equals(RequestType.NUMPACKAGE)) {
             //transforma o numero de pacotes em int
@@ -65,14 +65,15 @@ public class ServerDistribution {
 
             //se tiver recebido corretamente o numero de pacotes, envia ao
             //cliente um booleano confirmando esta acao
-            confirmationPackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+            confirmationPackage = new PseudoPackage(RequestType.RESPONSEPACKAGE, jsonContent);
             sendData = packageShredder.fragment(gson.toJson(confirmationPackage));
 
             DatagramPacket sendPacketConfirmation = new DatagramPacket(sendData[0],
                     sendData[0].length, IPAddress, clientPort);
 
             serverSocket.send(sendPacketConfirmation);
-
+            
+            System.out.println("Enviou confirmação p/ número de pacotes de entrada");
             //matriz de byte que recebera os pacotes com os dados
             byte[][] fragmentedPackage = new byte[numPackages][BYTE_LENGTH];
 
@@ -84,7 +85,7 @@ public class ServerDistribution {
                 serverSocket.receive(receivedFromClient);
                 fragmentedPackage[i] = receivedFromClient.getData();
             }
-
+            System.out.println("Recebeu pacotes de entrada");
             //desfragmenta, ordena os pacotes recebidos e os converte novamente para
             //um pseudoPackage
             String receivedObject = packageShredder.defragment(fragmentedPackage);
@@ -94,12 +95,11 @@ public class ServerDistribution {
             reader.close();
             
             //cria uma Thread para tratar a requisicao do cliente
-            ServiceAdapterThread adapter = new ServiceAdapterThread(IPAddress, clientPort, returnPackage);
+            ServiceAdapterThread adapter = new ServiceAdapterThread(IPAddress, clientPort,port, returnPackage);
             adapter.evaluateRequest();
             Thread adapterThread = new Thread(adapter);
+            System.out.println("Enviou para a Thread");
             adapterThread.start();
-            return;
-
         } else {
             //caso o tipo da requisicao recebida nao seja o numero de pacotes,
             //envia ao cliente uma confirmacao de erro
@@ -108,7 +108,7 @@ public class ServerDistribution {
             jsonContent = new ArrayList();
             jsonContent.add("false");
 
-            confirmationPackage = new PseudoPackage(RequestType.CONFIRMATIONPACKAGE, jsonContent);
+            confirmationPackage = new PseudoPackage(RequestType.RESPONSEPACKAGE, jsonContent);
             sendData = packageShredder.fragment(gson.toJson(confirmationPackage));
 
             DatagramPacket sendPacketConfirmation = new DatagramPacket(sendData[0],
@@ -140,6 +140,6 @@ public class ServerDistribution {
                     sendData[0].length, IPAddress, clientPort);
             serverSocket.send(sendPacketConfirmation);
         }
-
+        
     }
 }

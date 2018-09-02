@@ -28,7 +28,7 @@ public class ClientDistribution {
 
         clientSocket = new DatagramSocket();
         servidor = "localhost";
-        porta = 2233;
+        porta = 22388;
         IPAddress = InetAddress.getByName(servidor);
     }
 
@@ -87,7 +87,7 @@ public class ClientDistribution {
 
         //se o numero de pacotes tiver chegado com sucesso
         if (Boolean.valueOf(confirmationPackage.getContent().get(0))
-                && confirmationPackage.getRequestType().equals(RequestType.CONFIRMATIONPACKAGE)) {
+                && confirmationPackage.getRequestType().equals(RequestType.RESPONSEPACKAGE)) {
 
             //percorre a matriz de bytes e envia os vetores de bytes contendo 
             //os dados ao servidor
@@ -97,13 +97,14 @@ public class ClientDistribution {
                 clientSocket.send(sendPackage);
             }
         } else {
+            //Se houver falha de comunicação retorna false
             System.out.println("Exceção: o número de pacotes não chegou ao servidor");
             PseudoPackage returnPackage;
-            RequestType requestError = RequestType.CONFIRMATIONPACKAGE;
+            RequestType requestError = RequestType.RESPONSEPACKAGE;
             ArrayList<String> arrayListError = new ArrayList();
             arrayListError.add("false");
-            
-            returnPackage = new PseudoPackage(requestError,arrayListError);
+
+            returnPackage = new PseudoPackage(requestError, arrayListError);
             return returnPackage;
         }
 
@@ -120,9 +121,24 @@ public class ClientDistribution {
         reader.close();
 
         if (receivedFromServerLengthPackage.getRequestType().equals(RequestType.NUMPACKAGE)) {
-            
+
             //transforma o numero de pacotes de resposta em int
             int numPackages = Integer.parseInt(receivedFromServerLengthPackage.getContent().get(0));
+
+            //prepara confirmação do recebimento do num de pacotes
+            byte[][] sendConfirmationServer;
+            RequestType requestTypeConfirmationServer = RequestType.RESPONSEPACKAGE;
+            jsonContent = new ArrayList();
+            jsonContent.add("true");
+            PseudoPackage confirmationToServerPackage = new PseudoPackage(requestTypeConfirmationServer, jsonContent);
+            sendConfirmationServer = packageShredder.fragment(gson.toJson(confirmationToServerPackage));
+
+            // manda confirmação de recebimento do pacote
+            for (byte[] sendConfirmationServer1 : sendConfirmationServer) {
+                DatagramPacket sendPackage = new DatagramPacket(sendConfirmationServer1,
+                        sendConfirmationServer1.length, IPAddress, porta+5);
+                clientSocket.send(sendPackage);
+            }
 
             //matriz de byte que recebera os pacotes de resposta
             byte[][] fragmentedPackage = new byte[numPackages][BYTE_LENGTH];
@@ -145,20 +161,47 @@ public class ClientDistribution {
             reader.setLenient(true);
             PseudoPackage returnPackage = gson.fromJson(reader, PseudoPackage.class);
             reader.close();
+            
+            //Confere se o pacote é de resposta
+            if (returnPackage.getRequestType().equals(RequestType.RESPONSEPACKAGE)) {
+                //prepara confirmação do recebimento dos pacotes de resposta
+                requestTypeConfirmationServer = RequestType.RESPONSEPACKAGE;
+                jsonContent = new ArrayList();
+                jsonContent.add("true");
+                confirmationToServerPackage = new PseudoPackage(requestTypeConfirmationServer, jsonContent);
+                sendConfirmationServer = packageShredder.fragment(gson.toJson(confirmationToServerPackage));
 
+                // manda confirmação de recebimento do pacote
+                for (byte[] sendConfirmationServer1 : sendConfirmationServer) {
+                    DatagramPacket sendPackage = new DatagramPacket(sendConfirmationServer1,
+                            sendConfirmationServer1.length, IPAddress, porta+5);
+                    clientSocket.send(sendPackage);
+                }
+            } else {
+                //Se houver falha de comunicação retorna false
+                RequestType requestError = RequestType.RESPONSEPACKAGE;
+                ArrayList<String> arrayListError = new ArrayList();
+                arrayListError.add("false");
+
+                returnPackage = new PseudoPackage(requestError, arrayListError);
+
+                return returnPackage;
+            }
             //retorna o resultado
             return returnPackage;
-        }else{
+        } else {
+            //Se houver falha de comunicação retorna false
+            System.out.println("Exceção: Falha na comunicação");
             PseudoPackage returnPackage;
-            RequestType requestError = RequestType.CONFIRMATIONPACKAGE;
+            RequestType requestError = RequestType.RESPONSEPACKAGE;
             ArrayList<String> arrayListError = new ArrayList();
             arrayListError.add("false");
-            
-            returnPackage = new PseudoPackage(requestError,arrayListError);
-            
+
+            returnPackage = new PseudoPackage(requestError, arrayListError);
+
             return returnPackage;
         }
-        
+
     }
 
 }
