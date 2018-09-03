@@ -28,10 +28,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Type;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -242,8 +239,11 @@ public class ServiceAdapterThread implements Runnable {
                 break;
 
             case SEARCHITEMBYNAME:
-
-                String nameItem = gson.fromJson(contentPackage.getContent().get(0), String.class);
+                
+                JsonReader reader = new JsonReader(new StringReader(contentPackage.getContent().get(0)));
+                reader.setLenient(true);
+                
+                String nameItem = gson.fromJson(reader, String.class);
                 keepItem = new KeepItem();
                 Item itemByName = keepItem.searchItemByName(nameItem);
 

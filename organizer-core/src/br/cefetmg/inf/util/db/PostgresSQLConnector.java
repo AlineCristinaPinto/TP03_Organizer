@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 public class PostgresSQLConnector implements ConnectionFactory{
     public final String databaseDriver = "org.postgresql.Driver";
-    private final static String databaseURL = "jdbc:postgresql://localhost:5433/organizer";
+    private final static String databaseURL = "jdbc:postgresql://localhost:5432/organizer";
     private final static String user = "postgres";
-    private final static String password = "123";
+    private final static String password = "postgres";
     
     @Override
     public Connection getConnection() throws ClassNotFoundException, SQLException {

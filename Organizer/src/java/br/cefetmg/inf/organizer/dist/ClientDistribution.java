@@ -127,7 +127,7 @@ public class ClientDistribution {
                         receiveData.length);
 
                 clientSocket.receive(receivedFromServer);
-                byte[] aux = receivedFromServer.getData();
+                byte[] aux = receivedFromServer.getData(    );
 
                 System.arraycopy(aux, 0, fragmentedPackage[i], 0, aux.length);
             }

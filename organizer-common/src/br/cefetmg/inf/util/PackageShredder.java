@@ -1,11 +1,12 @@
 package br.cefetmg.inf.util;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PackageShredder {
 
-    public byte[][] fragment(String pseudoPackage) {
+    public byte[][] fragment(String pseudoPackage) throws UnsupportedEncodingException {
 
         final int BYTE_LENGTH = 1024;
         byte[][] byteMatrix;
@@ -47,7 +48,7 @@ public class PackageShredder {
                         auxStr = packageIndex + symbol;
                         finalIndex = firstIndex + BYTE_LENGTH - (packageIndex + symbol).length();
                         auxStr += pseudoPackage.substring(firstIndex, finalIndex);
-                        byteMatrix[packageIndex] = auxStr.getBytes();
+                        byteMatrix[packageIndex] = auxStr.getBytes("UTF-8");
                         firstIndex = finalIndex;
                         packageIndex++;
                     }
@@ -56,11 +57,11 @@ public class PackageShredder {
             //preenche os bytes que sobraram
             auxStr = packageIndex + symbol;
             auxStr += pseudoPackage.substring(firstIndex, pseudoPackage.length());
-            byteMatrix[packageIndex] = auxStr.getBytes();
+            byteMatrix[packageIndex] = auxStr.getBytes("UTF-8");
         } else {
             //se apenas 1 pacote for enviado, nao divide nem coloca cabecalho
             byte[][] returnByte = new byte[1][BYTE_LENGTH];
-            returnByte[0] = pseudoPackage.getBytes();
+            returnByte[0] = pseudoPackage.getBytes("UTF-8");
             return returnByte;
         }
 

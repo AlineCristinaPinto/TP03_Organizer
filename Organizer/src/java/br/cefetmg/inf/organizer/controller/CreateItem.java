@@ -122,6 +122,7 @@ public class CreateItem implements GenericProcess {
                     ItemTag itemTag = new ItemTag();
 
                     itemTag.setItem(itemWithId);
+
                     // inserindo o array list de tag aqui
                     itemTag.setListTags(tagItem);
 
