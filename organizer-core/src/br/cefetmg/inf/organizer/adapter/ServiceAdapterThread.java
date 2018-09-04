@@ -239,11 +239,8 @@ public class ServiceAdapterThread implements Runnable {
                 break;
 
             case SEARCHITEMBYNAME:
-                
-                JsonReader reader = new JsonReader(new StringReader(contentPackage.getContent().get(0)));
-                reader.setLenient(true);
-                
-                String nameItem = gson.fromJson(reader, String.class);
+
+                String nameItem = contentPackage.getContent().get(0);
                 keepItem = new KeepItem();
                 Item itemByName = keepItem.searchItemByName(nameItem);
 

@@ -12,6 +12,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class ClientDistribution {
         byte[][] sendData;
         byte[][] numPackage;
         byte[] receiveData = new byte[BYTE_LENGTH];
+        final Charset UTF8_CHARSET = Charset.forName("UTF-8");
         Gson gson = new Gson();
 
         //transforma o pseudoPackage com os dados a serem enviados em pacotes de byte
@@ -79,7 +81,7 @@ public class ClientDistribution {
 
         clientSocket.receive(receiveConfirmation);
 
-        String receivedPackage = new String(receiveConfirmation.getData());
+        String receivedPackage = new String(receiveConfirmation.getData(), UTF8_CHARSET);
         reader = new JsonReader(new StringReader(receivedPackage));
         reader.setLenient(true);
         PseudoPackage confirmationPackage = gson.fromJson(reader, PseudoPackage.class);
@@ -104,7 +106,7 @@ public class ClientDistribution {
 
         clientSocket.receive(receivedFromServerLength);
 
-        String strReceivedFromServerLength = new String(receivedFromServerLength.getData());
+        String strReceivedFromServerLength = new String(receivedFromServerLength.getData(), UTF8_CHARSET);
         reader = new JsonReader(new StringReader(strReceivedFromServerLength));
         reader.setLenient(true);
         PseudoPackage receivedFromServerLengthPackage = gson.fromJson(reader, PseudoPackage.class);

@@ -1,8 +1,7 @@
 package br.cefetmg.inf.util;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.charset.Charset;
 
 public class PackageShredder {
 
@@ -10,6 +9,7 @@ public class PackageShredder {
 
         final int BYTE_LENGTH = 1024;
         byte[][] byteMatrix;
+        final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 
         if (pseudoPackage.length() > 1024) {
             int firstIndex = 0, packageIndex = 0, finalIndex = 0, headerSpace = 0;
@@ -48,7 +48,7 @@ public class PackageShredder {
                         auxStr = packageIndex + symbol;
                         finalIndex = firstIndex + BYTE_LENGTH - (packageIndex + symbol).length();
                         auxStr += pseudoPackage.substring(firstIndex, finalIndex);
-                        byteMatrix[packageIndex] = auxStr.getBytes("UTF-8");
+                        byteMatrix[packageIndex] = auxStr.getBytes(UTF8_CHARSET);
                         firstIndex = finalIndex;
                         packageIndex++;
                     }
@@ -57,19 +57,19 @@ public class PackageShredder {
             //preenche os bytes que sobraram
             auxStr = packageIndex + symbol;
             auxStr += pseudoPackage.substring(firstIndex, pseudoPackage.length());
-            byteMatrix[packageIndex] = auxStr.getBytes("UTF-8");
+            byteMatrix[packageIndex] = auxStr.getBytes(UTF8_CHARSET);
         } else {
             //se apenas 1 pacote for enviado, nao divide nem coloca cabecalho
             byte[][] returnByte = new byte[1][BYTE_LENGTH];
-            returnByte[0] = pseudoPackage.getBytes("UTF-8");
+            returnByte[0] = pseudoPackage.getBytes(UTF8_CHARSET);
             return returnByte;
         }
 
         return byteMatrix;
     }
 
-    public String defragment(byte[][] byteMatrix) {
-
+    public String defragment(byte[][] byteMatrix) throws UnsupportedEncodingException {
+        final Charset UTF8_CHARSET = Charset.forName("UTF-8");
         if (byteMatrix.length > 1) {
             //matriz de byte em ordem
             byte[][] byteMatrixSort = new byte[byteMatrix.length][byteMatrix[0].length];
@@ -93,7 +93,7 @@ public class PackageShredder {
             String concat = "";
             String auxStr = "";
             for (int i = 0; i < byteMatrixSort.length; i++) {
-                auxStr = new String(byteMatrixSort[i]);
+                auxStr = new String(byteMatrixSort[i], UTF8_CHARSET);
                 auxStr = auxStr.substring(auxStr.indexOf("&") + 1, auxStr.length());
                 concat += auxStr;
                 System.out.println("byteMatrixSort[" +i +"]: " +new String(byteMatrixSort[i]));
@@ -101,7 +101,7 @@ public class PackageShredder {
             }
             return concat;
         }else{
-            String returnStr = new String(byteMatrix[0]);
+            String returnStr = new String(byteMatrix[0], UTF8_CHARSET);
             return returnStr;
         }
 

@@ -57,12 +57,11 @@ public class CreateItem implements GenericProcess {
         if (!tag.isEmpty()) {
             String[] vetTag = tag.split(";");
 
-            // Esperar Proxy do Pedro Lucas para funcionar
             IKeepTag keepTag = new KeepTagProxy();
 
             for (String vetTag1 : vetTag) {
                 if (keepTag.searchTagByName(vetTag1.trim(), user) == null) {
-                    //exceção
+                    System.out.println("APOSTO 50 CENTAVOS QUE O ERRO TA AQ");
                 } else {
                     Tag tagOfUser = new Tag();
 

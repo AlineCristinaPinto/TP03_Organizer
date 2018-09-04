@@ -14,6 +14,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ServerDistribution {
 
     private static DatagramSocket serverSocket;
     private static final int port = 22388;
+    private static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 
     public static void main(String args[]) throws SocketException, IOException, PersistenceException, BusinessException {
         serverSocket = new DatagramSocket(port);
@@ -47,7 +49,7 @@ public class ServerDistribution {
 
         //transforma o pacote recebido em um pseudoPackage contendo o numero
         //de pacotes que serao enviados pelo cliente posteriormente
-        String receivedLength = new String(receivePacket.getData());
+        String receivedLength = new String(receivePacket.getData(), UTF8_CHARSET);
         reader = new JsonReader(new StringReader(receivedLength));
         reader.setLenient(true);
         PseudoPackage lengthPackage = gson.fromJson(reader, PseudoPackage.class);
